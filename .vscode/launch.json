@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ShopListApiApplication<shop_list_api>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.shop_list_api.shop_list_api.ShopListApiApplication",
+            "projectName": "shop_list_api",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
