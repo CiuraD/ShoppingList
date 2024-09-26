@@ -2,10 +2,17 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ShopApiApplication",
+            "request": "launch",
+            "mainClass": "shop_api.ShopApiApplication",
+            "projectName": "shop_api"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-ShopListApiApplication<shop_list_api>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.shop_list_api.shop_list_api.ShopListApiApplication",
+            "mainClass": "shop_api.ShopListApiApplication",
             "projectName": "shop_list_api",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
@@ -15,7 +22,7 @@
             "name": "Spring Boot-ShopApiApplication<shop_api>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.shop_api.shop_api.ShopApiApplication",
+            "mainClass": "shop_api.ShopApiApplication",
             "projectName": "shop_api",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
