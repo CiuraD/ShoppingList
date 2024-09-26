@@ -1,9 +1,9 @@
-package com.shop_api.shop_api.product;
+package shop_api.product;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 @Service
 public class ProductService {

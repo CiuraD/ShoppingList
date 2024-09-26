@@ -1,4 +1,4 @@
-package com.shop_api.shop_api.product;
+package shop_api.product;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
