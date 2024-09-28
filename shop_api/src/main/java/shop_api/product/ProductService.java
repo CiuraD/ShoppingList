@@ -1,6 +1,6 @@
 package shop_api.product;
 
-import javax.annotation.PostConstruct;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,14 +11,19 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    @PostConstruct
-    public void testConnection() {
-        Product product = new Product();
-        product.setName("Test Product");
-        product.setPrice(10.0);
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
 
-        productRepository.save(product);
+    public Product getProductById(String id) {
+        return productRepository.findById(id).orElse(null);
+    }
 
-        System.out.println("Product saved successfully: " + productRepository.findAll());
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
+    }
+
+    public void deleteProduct(String id) {
+        productRepository.deleteById(id);
     }
 }
