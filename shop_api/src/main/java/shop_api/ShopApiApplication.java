@@ -1,5 +1,8 @@
 package shop_api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +19,10 @@ public class ShopApiApplication {
 	}
 
 	@GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-      return String.format("Hello %s!", name);
+    public Map<String, String> hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", String.format("YES IT IS WORKING %s!", name));
+        return response;
     }
 
 }
