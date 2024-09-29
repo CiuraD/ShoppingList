@@ -14,16 +14,11 @@ export class AuthService {
 ) {}
 
   login(username: string, password: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
+    
     const body = { username, password };
-    return this.http.post<any>(`${environment.api}/api/users/login`, body, { headers }).pipe(
+    return this.http.post<any>(`${environment.api}/api/users/login`, body).pipe(
         tap((response: any) => {
-            console.log('Login successful', response.token);
             const access_token = response.token;
-            console.log('Access token:', access_token);
-
             this.localStorageService.setString(LocalStorageService.TOKEN_KEY, access_token);
         }),
         switchMap(() => of(null))

@@ -14,7 +14,6 @@ class AuthGuardService {
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const savedToken = this.localStorageService.getString(LocalStorageService.TOKEN_KEY);
-        console.log('Token:', savedToken);
 
         if (!savedToken || jwtHelper.isTokenExpired(savedToken)) {
             console.log('Token expired or not found');

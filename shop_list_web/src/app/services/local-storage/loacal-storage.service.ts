@@ -33,7 +33,6 @@ export class LocalStorageService {
     }
 
     private set(key: string, value: string): void {
-        console.log('Setting key:', this.constructKey(key));
         localStorage.setItem(this.constructKey(key), value);
     }
 

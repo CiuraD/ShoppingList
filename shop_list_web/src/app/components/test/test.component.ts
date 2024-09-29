@@ -1,7 +1,8 @@
+
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import {Observable} from 'rxjs';
-import {ApiService} from '../../aa';
+import {TestService} from '../../services/test/test.service';
 
 @Component({
     selector: 'test',
@@ -15,8 +16,8 @@ import {ApiService} from '../../aa';
 })
 export class TestComponent {
     constructor(
-        // private http: HttpClient,
-        private apiService: ApiService,
+        private cdr: ChangeDetectorRef,
+        private apiService: TestService,
       ) {
       }
     
@@ -24,12 +25,12 @@ export class TestComponent {
       textFromApi = 'nie działa';
     
       ngOnInit(): void {
-        //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-        //Add 'implements OnInit' to the class.
-        console.log('hello');
         this.hello().subscribe(data => {
           console.log(data);
+          console.log(data.message);
           this.textFromApi = data.message;
+          console.log(this.textFromApi);
+          this.cdr.markForCheck();
         });
       }
     

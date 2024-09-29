@@ -5,15 +5,19 @@ import {LoginComponent} from './components/login/login.component';
 import {TestComponent} from './components/test/test.component';
 
 export const routes: Routes = [
-    {
-        path: 'login',
-        component: LoginComponent,
-    },
-
+    
     {
         path: 'aaa',
         component: TestComponent,
         canActivate: [AuthGuard],
     },
+    {
+        path: 'login',
+        component: LoginComponent,
+    },
+    {
+        path: '**',
+        redirectTo: 'login',
+    }
     
 ];

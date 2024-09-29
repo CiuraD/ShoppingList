@@ -1,37 +1,42 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Observable } from 'rxjs';
-import {HttpClient} from "@angular/common/http";
-import {ApiService} from "./aa";
+import {HttpClientModule} from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import {filter} from 'rxjs';
+import {AuthService} from './services/auth/auth.service';
+import {JwtModule} from '@auth0/angular-jwt';
+import {TestService} from './services/test/test.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, HttpClientModule, JwtModule],
+  providers: [
+      AuthService,
+      TestService,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  showHeader: boolean = true;
+  icon: string = '';
+  title: string = '';
+
   constructor(
-    // private http: HttpClient,
-    private apiService: ApiService,
-  ) {
-  }
+      private activatedRoute: ActivatedRoute,
+      private router: Router,
+  ) {}
 
-  title = 'shop_list_web';
-  textFromApi = 'nie działa';
-
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    console.log('hello');
-    this.hello().subscribe(data => {
-      console.log(data);
-      this.textFromApi = data.message;
-    });
-  }
-
-  hello(): Observable<any> {
-    return this.apiService.hello();
+  ngOnInit() {
+      this.router.events.pipe(
+          filter(event => event instanceof NavigationEnd)
+      ).subscribe(() => {
+          const routeData = this.activatedRoute.firstChild?.snapshot.data;
+          if (routeData) {
+              this.showHeader = routeData['showHeader'] !== false;
+              this.icon = routeData['icon'] || '';
+              this.title = routeData['title'] || '';
+          }
+      });
   }
 }
