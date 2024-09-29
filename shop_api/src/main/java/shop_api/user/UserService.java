@@ -41,11 +41,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User loginUser(String username, String password) {
-        User user = userRepository.findByUsername(username);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            return user;
+    public boolean loginUser(String username, String password) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user != null) {
+            boolean matches = passwordEncoder.matches(password, user.getPassword());
+            return matches;
         }
-        return null;
+        return false;
     }
 }
