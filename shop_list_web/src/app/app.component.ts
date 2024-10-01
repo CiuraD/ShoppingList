@@ -5,14 +5,22 @@ import {filter} from 'rxjs';
 import {AuthService} from './services/auth/auth.service';
 import {JwtModule} from '@auth0/angular-jwt';
 import {TestService} from './services/test/test.service';
+import {ProductService} from './services/product/product.service';
+import {HeaderComponent} from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, JwtModule],
+  imports: [
+    RouterOutlet,
+    HttpClientModule,
+    JwtModule,
+    HeaderComponent,
+  ],
   providers: [
       AuthService,
       TestService,
+      ProductService,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
