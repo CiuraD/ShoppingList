@@ -25,6 +25,11 @@ export class AuthService {
     )
   }
 
+  register(username: string, email: string, password: string): Observable<any> {
+    const body = { username, email, password };
+    return this.http.post<any>(`${environment.api}/api/users/register`, body);
+  }
+
   logout() {
     this.localStorageService.unset(LocalStorageService.TOKEN_KEY);
 }

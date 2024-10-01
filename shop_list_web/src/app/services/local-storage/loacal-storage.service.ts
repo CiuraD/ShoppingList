@@ -11,6 +11,10 @@ export class LocalStorageService {
 
     constructor() {}
 
+    isTokenSet(): boolean {
+        return !!this.get(LocalStorageService.TOKEN_KEY);
+    }
+
     setObject(key: string, value: any): void {
         this.set(key, JSON.stringify(value));
     }

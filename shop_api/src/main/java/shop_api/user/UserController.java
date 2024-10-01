@@ -25,8 +25,8 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody User user) {
-        return userService.registerUser(user);
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest RegisterRequest) {
+        return userService.registerUser(RegisterRequest);
     }
     
     @PutMapping("/update/{id}")

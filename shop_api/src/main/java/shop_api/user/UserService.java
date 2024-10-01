@@ -1,8 +1,12 @@
 package shop_api.user;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserService {
@@ -12,9 +16,21 @@ public class UserService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public User registerUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public ResponseEntity<?> registerUser(RegisterRequest registerRequest) {
+        User newUser = new User();
+        newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        newUser.setUsername(registerRequest.getUsername());
+        newUser.setEmail(registerRequest.getEmail());
+        
+        if (userRepository.findByUsernameIgnoreCase(newUser.getUsername()) != null) {
+            return ResponseEntity.status(400).body("Username already exists");
+        }
+        
+        if (userRepository.save(newUser).getId() == null) {
+            return ResponseEntity.status(500).body("Registration failed");
+        }
+        
+        return ResponseEntity.ok(Map.of("message", "Registration successful"));
     }
 
     public User updateUser(String id, User user) {
