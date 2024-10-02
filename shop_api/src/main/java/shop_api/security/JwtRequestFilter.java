@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -43,6 +44,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (SignatureException e) {
                 // Invalid JWT signature
                 logger.error("Invalid JWT signature: " + e.getMessage(), e);
+            } catch (ExpiredJwtException e) {
+                System.out.println("JWT Token has expired");
+                response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                response.getWriter().write("JWT Token has expired");
+                return;
             }
         }
 
