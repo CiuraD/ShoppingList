@@ -6,6 +6,8 @@ import {LocalStorageService} from "../services/local-storage/loacal-storage.serv
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {Router} from '@angular/router';
 
+const jwtHelper = new JwtHelperService();
+
 @Injectable({
     providedIn: 'root'
 })
@@ -13,33 +15,23 @@ export class AuthInterceptor implements HttpInterceptor {
 
     constructor(
         private readonly localStorageService: LocalStorageService,
+        private readonly router: Router,
     ) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const token = this.localStorageService.getString(LocalStorageService.TOKEN_KEY);
-        console.log('req - ', req);
+
         if (token) {
+            if (jwtHelper.isTokenExpired(token)) {
+                this.localStorageService.unset(LocalStorageService.TOKEN_KEY);
+                this.router.navigate(['/login']);
+                return throwError('Token expired');
+            }
             req = req.clone({
                 setHeaders: { Authorization: `Bearer ${token}` }
             });
         }
 
-        console.log('req - ', req);
-        return next.handle(req).pipe(
-            tap((event: HttpEvent<any>) => {
-              // Handle successful responses here if needed
-              console.log('Response event - ', event);
-            }),
-            catchError((error: HttpErrorResponse) => {
-              console.log('Error in request - ', error);
-              if (error.status === 401) {
-                // Handle the expired token case
-                console.log('Token expired. Redirecting to login.');
-                this.localStorageService.unset(LocalStorageService.TOKEN_KEY);
-                // this.router.navigate(['/login']);
-              }
-              return throwError(error);
-            })
-          );
+        return next.handle(req);
     }
 }

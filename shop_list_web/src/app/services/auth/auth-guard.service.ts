@@ -17,6 +17,7 @@ class AuthGuardService {
 
         if (!savedToken || jwtHelper.isTokenExpired(savedToken)) {
             console.log('Token expired or not found');
+            this.localStorageService.unset(LocalStorageService.TOKEN_KEY);
             return this.router.parseUrl('/login');
         }
 
