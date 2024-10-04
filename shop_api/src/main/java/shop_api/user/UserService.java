@@ -1,22 +1,30 @@
 package shop_api.user;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import shop_api.product.Product;
+import shop_api.product.ProductRepository;
 import shop_api.productList.ProductList;
 import shop_api.productList.ProductListRepository;
+import shop_api.productList.ProductListRequest;
 import shop_api.userGroup.UserGroupRepository;
 
 
 @Service
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -26,6 +34,9 @@ public class UserService {
 
     @Autowired
     private UserGroupRepository userGroupRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -85,17 +96,70 @@ public class UserService {
             User user = optionalUser.get();
             List<String> userProductListIds = user.getProductListsId();
             List<ProductList> userProductLists = productListRepository.findAllById(userProductListIds);
+            logger.info("User product lists: " + userProductLists);
 
             List<String> userGroupIds = user.getUserGroupId();
+            if (userGroupIds == null) {
+                return userProductLists;    
+            }
             List<ProductList> groupProductLists = userGroupRepository.findAllById(userGroupIds)
                 .stream()
                 .flatMap(group -> productListRepository.findAllById(group.getProductListsId()).stream())
                 .collect(Collectors.toList());
 
-                userProductLists.addAll(groupProductLists);
-                return userProductLists;
+            userProductLists.addAll(groupProductLists);
+            Map<String, ProductList> uniqueProductListsMap = userProductLists.stream()
+                .collect(Collectors.toMap(ProductList::getId, productList -> productList, (existing, replacement) -> existing));
+
+            return new ArrayList<>(uniqueProductListsMap.values());
         } else {
             throw new RuntimeException("User not found with username " + username);
+        }
+    }
+
+    public ProductList addProductListForUser(ProductListRequest productListRequest) {
+        Optional<User> optionalUser = userRepository.findByUsername(productListRequest.getUserName());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            // Create ProductList
+            ProductList productList = new ProductList(
+                productListRequest.getName(),
+                null,
+                productListRequest.getUserGroupId(),
+                user.getId()
+            );
+            final ProductList savedProductList = productListRepository.save(productList);
+
+            // Create Products and associate them with the ProductList
+            List<Product> products = productListRequest.getProducts().stream()
+                .map(productRequest -> new Product(
+                    productRequest.getName(),
+                    productRequest.getQuantity(),
+                    productRequest.getQuantityType(),
+                    productRequest.getImageId(),
+                    savedProductList.getId()
+                ))
+                .collect(Collectors.toList());
+            products = productRepository.saveAll(products);
+
+            // Update ProductList with product IDs
+            List<String> productIds = products.stream().map(Product::getId).collect(Collectors.toList());
+            savedProductList.setProductsId(productIds);
+            final ProductList updatedProductList = productListRepository.save(savedProductList);
+
+            // Associate ProductList with User
+            List<String> userProductLists = user.getProductListsId();
+            if (userProductLists == null) {
+                userProductLists = new ArrayList<>();
+            }
+            userProductLists.add(updatedProductList.getId());
+            user.setProductListsId(userProductLists);
+            userRepository.save(user);
+
+            return updatedProductList;
+        } else {
+            throw new RuntimeException("User not found with ID " + productListRequest.getUserName());
         }
     }
 }
