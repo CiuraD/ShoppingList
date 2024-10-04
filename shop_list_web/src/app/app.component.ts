@@ -6,7 +6,6 @@ import {AuthService} from './services/auth/auth.service';
 import {JwtModule} from '@auth0/angular-jwt';
 import {TestService} from './services/test/test.service';
 import {ProductService} from './services/product/product.service';
-import {HeaderComponent} from './components/header/header.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -21,7 +20,6 @@ import {MatListModule} from '@angular/material/list';
     RouterOutlet,
     HttpClientModule,
     JwtModule,
-    HeaderComponent,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
@@ -32,7 +30,6 @@ import {MatListModule} from '@angular/material/list';
       AuthService,
       TestService,
       ProductService,
-      
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

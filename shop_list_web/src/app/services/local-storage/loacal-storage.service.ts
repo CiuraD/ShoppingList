@@ -6,6 +6,7 @@ import {environment} from "../../environments/environment";
 })
 export class LocalStorageService {
     public static TOKEN_KEY = 'token';
+    public static USERNAME = 'username';
 
     private static readonly PREFIX: string = 'shopList';
 
