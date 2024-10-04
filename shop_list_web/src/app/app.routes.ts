@@ -10,14 +10,23 @@ export const routes: Routes = [
         path: 'home',
         component: TestComponent,
         canActivate: [AuthGuard],
+        data: {icon:'home', showNav: true, showInNav: true, title: 'Home'},
+    },
+    {
+        path: 'products',
+        component: TestComponent,
+        canActivate: [AuthGuard],
+        data: {icon:'inventory', showNav: true, showInNav: true, title: 'Inventory'},
     },
     {
         path: 'login',
         component: LoginComponent,
+        data: {icon:'login', showNav: false, showInNav: false, title: 'Login'},
     },
     {
         path: 'register',
         component: RegistrationComponent,
+        data: {icon:'login', showNav: false, showInNav: false, title: 'Register'},
     },
     {
         path: '**',
