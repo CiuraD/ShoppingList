@@ -1,5 +1,7 @@
 package shop_api.user;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,6 +16,7 @@ public class User {
     
     private String password;
     private String email;
+    private List<String> userGroupId;
 
     public String getId() {
         return id;
@@ -31,6 +34,10 @@ public class User {
         return email;
     }
 
+    public List<String> getUserGroupId() {
+        return userGroupId;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -41,5 +48,9 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setUserGroupId(List<String> userGroupId) {
+        this.userGroupId = userGroupId;
     }
 }
