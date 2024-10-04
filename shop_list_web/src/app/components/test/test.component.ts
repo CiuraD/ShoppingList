@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import {Observable} from 'rxjs';
 import {TestService} from '../../services/test/test.service';
-import {Product} from '../../services/product/product.interface';
+import {Product} from '../../services/product/interfaces/product.interface';
 
 @Component({
     selector: 'test',

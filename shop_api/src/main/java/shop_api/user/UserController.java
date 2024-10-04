@@ -60,7 +60,7 @@ public class UserController {
     public ResponseEntity<?> getProductListsForUserAndGroups(@PathVariable String username) {
         try {
             List<ProductList> productLists = userService.getProductListsForUserAndGroups(username);
-            return ResponseEntity.ok(Map.of("productLists", productLists));
+            return ResponseEntity.ok(productLists);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         }

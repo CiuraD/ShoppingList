@@ -1,1 +1,38 @@
-<p>lists works!</p>,
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <mat-card-title>Produts Lists</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-accordion class="product-lists" appearance="outlined">
+            @for (productList of productLists; track $index) {
+                <mat-expansion-panel [expanded]="step() === $index" (opened)="setStep($index); getProducts(productList.id)" hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title> {{productList.name}} </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                @if (loading) {
+                    <mat-spinner></mat-spinner>
+                }
+                
+                @if (!loading && products.length > 0) {
+                    @for (product of products; track $index) {
+                        <mat-card class="product" appearance="outlined">
+                            <mat-card-header>
+                                <mat-card-title>{{product.name}}</mat-card-title>
+                                <mat-card-subtitle>
+                                    <span>{{product.quantity}}</span>
+                                    - 
+                                    <span>{{product.quantityType}}</span>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                PLACEHOLDER   
+                            </mat-card-content>
+                        </mat-card>
+                    }
+                }
+                </mat-expansion-panel>
+            }
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>

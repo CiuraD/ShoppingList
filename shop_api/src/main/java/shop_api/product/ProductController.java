@@ -66,4 +66,9 @@ public class ProductController {
         Product product = productService.getProductById(id);
         return imageService.getImage(product.getImageId());
     }
+
+    @GetMapping("/productList/{productListId}")
+    public List<Product> getProductsByProductListId(@PathVariable String productListId) {
+        return productService.getProductsByProductListId(productListId);
+    }
 }
