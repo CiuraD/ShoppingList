@@ -38,6 +38,7 @@ export class ListsComponent implements OnInit {
     productLists: ProductListLazy[] = [];
     loading = false;
     products: Product[] = [];
+    userName: string = '';
 
     setStep(index: number) {
         this.step.set(index);
@@ -52,8 +53,12 @@ export class ListsComponent implements OnInit {
     }
 
     ngOnInit() {
-        const userName = this.localStorageService.getString(LocalStorageService.USERNAME) || '';
-        this.productService.getProductListsForUser(userName).subscribe({
+        this.userName = this.localStorageService.getString(LocalStorageService.USERNAME) || '';
+        this.getProductLists();
+    }
+
+    getProductLists() {
+        this.productService.getProductListsForUser(this.userName).subscribe({
             next: response => {
                 this.productLists = response;
                 this.cdr.markForCheck();
@@ -95,4 +100,16 @@ export class ListsComponent implements OnInit {
     protected onEditList(listId: string) {
         this.router.navigate([`create/${listId}`]);
     }
+
+    protected onDeleteList(listId: string) {
+        this.productService.deleteList(listId).subscribe({
+            error: error => {
+                console.error('Failed to delete list', error);
+            }
+        }).add(() => {
+            this.getProductLists();
+        });
+    }
+
+
 }

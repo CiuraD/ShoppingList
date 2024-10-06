@@ -16,6 +16,7 @@ export class ProductService {
   ) {}
 
   getProducts(): Observable<Product[]> {
+    //TODO DELETE THIS
     return this.http.get<Product[]>(`${environment.api}/api/products`);
   }
 
@@ -28,7 +29,7 @@ export class ProductService {
   }
 
   getProductListLazy(listId: string): Observable<ProductListLazy> {
-    return this.http.get<ProductListLazy>(`${environment.api}/api/roductLists/${listId}`);
+    return this.http.get<ProductListLazy>(`${environment.api}/api/productLists/${listId}`);
   }
 
   createList(list: ProductListFull): Observable<ProductListFull> {
@@ -38,5 +39,13 @@ export class ProductService {
   updateList(list: ProductListFull): Observable<ProductListFull> {
     console.log('updateList', list);
     return this.http.put<ProductListFull>(`${environment.api}/api/users/updateProductList`, list);
+  }
+
+  deleteProduct(productId: string): Observable<any> {
+    return this.http.delete<any>(`${environment.api}/api/products/${productId}`);
+  }
+
+  deleteList(listId: string): Observable<any> {
+    return this.http.delete<any>(`${environment.api}/api/productLists/delete/${listId}`);
   }
 }

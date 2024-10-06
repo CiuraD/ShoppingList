@@ -1,6 +1,11 @@
 <mat-card appearance="outlined">
     <mat-card-header>
-        <mat-card-title>Edit List</mat-card-title>
+        <mat-card-title>
+            Edit List
+            <button mat-mini-fab class="mini-button" type="button" (click)="onClearForm()">
+                <mat-icon>clear_all</mat-icon>
+            </button>
+        </mat-card-title>
     </mat-card-header>
     <mat-card-content>
         <form id="productListEditForm" [formGroup]="listForm" (ngSubmit)="onSubmit()">
@@ -11,7 +16,7 @@
             <mat-card appearance="outlined">
                 <mat-card-header>
                     <mat-card-title>Products</mat-card-title>
-                    <button mat-mini-fab class="mini-button" (click)="onEditProduct(null)">
+                    <button mat-mini-fab class="mini-button" type="button" (click)="onEditProduct(null)">
                         <mat-icon>add</mat-icon>
                     </button>
                 </mat-card-header>
@@ -26,15 +31,15 @@
                                             - 
                                             <span>{{product.quantityType}}</span>
                                         </mat-card-subtitle>
-                                        <button mat-mini-fab class="mini-button edit" (click)="onEditProduct($index)">
+                                        <button mat-mini-fab class="mini-button edit" type="button" (click)="onEditProduct($index)">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-mini-fab class="mini-button delete">
+                                        <button mat-mini-fab class="mini-button delete" type="button" (click)="onDeleteProduct($index)">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </mat-card-header>
                                     <mat-card-content>
-                                        PLACEHOLDER
+                                        IMG PLACEHOLDER
                                     </mat-card-content>
                                 </mat-card>
                             }
