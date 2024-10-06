@@ -9,21 +9,21 @@ import org.springframework.stereotype.Service;
 public class ProductListService {
 
     @Autowired
-    private ProductListRepository productCatalogRepository;
+    private ProductListRepository roductListRepository;
 
-    public List<ProductList> getAllProductCatalogs() {
-        return productCatalogRepository.findAll();
+    public List<ProductList> getAllProductLists() {
+        return roductListRepository.findAll();
     }
 
-    public ProductList getProductCatalogById(String id) {
-        return productCatalogRepository.findById(id).orElse(null);
+    public ProductList getProductListById(String id) {
+        return roductListRepository.findById(id).orElse(null);
     }
 
-    public ProductList saveProductCatalog(ProductList productCatalog) {
-        return productCatalogRepository.save(productCatalog);
+    public ProductList saveProductList(ProductList productList) {
+        return roductListRepository.save(productList);
     }
 
-    public void deleteProductCatalog(String id) {
-        productCatalogRepository.deleteById(id);
+    public void deleteProductList(String id) {
+        roductListRepository.deleteById(id);
     }
 }

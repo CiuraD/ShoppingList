@@ -13,35 +13,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/productCatalogs")
+@RequestMapping("/api/roductLists")
 public class ProductListController {
 
     @Autowired
-    private ProductListService productCatalogService;
+    private ProductListService roductListService;
 
     @GetMapping
-    public List<ProductList> getAllProductCatalogs() {
-        return productCatalogService.getAllProductCatalogs();
+    public List<ProductList> getAllProductLists() {
+        return roductListService.getAllProductLists();
     }
 
     @GetMapping("/{id}")
-    public ProductList getProductCatalogById(@PathVariable String id) {
-        return productCatalogService.getProductCatalogById(id);
+    public ProductList getProductListById(@PathVariable String id) {
+        return roductListService.getProductListById(id);
     }
 
     @PostMapping
-    public ProductList createProductCatalog(@RequestBody ProductList productCatalog) {
-        return productCatalogService.saveProductCatalog(productCatalog);
+    public ProductList createProductList(@RequestBody ProductList productList) {
+        return roductListService.saveProductList(productList);
     }
 
     @PutMapping("/{id}")
-    public ProductList updateProductCatalog(@PathVariable String id, @RequestBody ProductList productCatalog) {
-        productCatalog.setId(id);
-        return productCatalogService.saveProductCatalog(productCatalog);
+    public ProductList updateProductList(@PathVariable String id, @RequestBody ProductList productList) {
+        productList.setId(id);
+        return roductListService.saveProductList(productList);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProductCatalog(@PathVariable String id) {
-        productCatalogService.deleteProductCatalog(id);
+    public void deleteProductList(@PathVariable String id) {
+        roductListService.deleteProductList(id);
     }
 }

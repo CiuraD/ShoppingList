@@ -69,6 +69,7 @@ export class AppComponent implements OnInit {
   navigateTo(route: string) {
     this.router.navigate([`/${route}`]);
   }
+  
   private createNavTable() {
     routes.forEach(route => {
       if (route.data && route.data['showInNav']) {

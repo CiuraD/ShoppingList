@@ -3,6 +3,8 @@ package shop_api.user;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +23,9 @@ import shop_api.util.JwtUtil;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+        private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     
     @Autowired
     private UserService userService;
@@ -71,6 +76,17 @@ public class UserController {
         try {
             ProductList productList = userService.addProductListForUser(productListRequest);
             return ResponseEntity.ok(productList);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateProductList")
+    public ResponseEntity<?> updateProductListForUser(@RequestBody ProductListRequest productListRequest) {
+        try {
+            logger.info("Updating product list for user: {}", productListRequest);
+            userService.updateProductListOnUser(productListRequest);
+            return ResponseEntity.ok("Product list updated");
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         }
