@@ -4,9 +4,20 @@ import {LoginComponent} from './components/login/login.component';
 import {TestComponent} from './components/test/test.component';
 import {RegistrationComponent} from './components/registration/registration.component';
 import {ListsComponent} from './components/lists/lists.component';
+import {EditListComponent} from './components/edit-list/edit-list.component';
 
 export const routes: Routes = [
     
+    {
+        path: 'login',
+        component: LoginComponent,
+        data: {icon:'login', showNav: false, showInNav: false, title: 'Login'},
+    },
+    {
+        path: 'register',
+        component: RegistrationComponent,
+        data: {icon:'login', showNav: false, showInNav: false, title: 'Register'},
+    },
     {
         path: 'home',
         component: TestComponent,
@@ -20,14 +31,10 @@ export const routes: Routes = [
         data: {icon:'list', showNav: true, showInNav: true, title: 'Lists'},
     },
     {
-        path: 'login',
-        component: LoginComponent,
-        data: {icon:'login', showNav: false, showInNav: false, title: 'Login'},
-    },
-    {
-        path: 'register',
-        component: RegistrationComponent,
-        data: {icon:'login', showNav: false, showInNav: false, title: 'Register'},
+        path: 'create/:id',
+        component: EditListComponent,
+        canActivate: [AuthGuard],
+        data: {icon:'edit_note', showNav: true, showInNav: true, title: 'Create List'},
     },
     {
         path: '**',

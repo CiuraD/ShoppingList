@@ -2,7 +2,7 @@ import { LocalStorageService } from './../../services/local-storage/loacal-stora
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, signal} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import {ProductList} from '../../services/product/interfaces/productList.interface';
+import {ProductListLazy} from '../../services/product/interfaces/productListLazy.interface';
 import {ProductService} from '../../services/product/product.service';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -29,7 +29,7 @@ export class ListsComponent implements OnInit {
     ) {}
 
     step = signal(0);
-    productLists: ProductList[] = [];
+    productLists: ProductListLazy[] = [];
     loading = false;
     products: Product[] = [];
 

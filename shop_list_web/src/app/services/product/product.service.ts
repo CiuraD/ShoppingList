@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {Product} from './interfaces/product.interface'
-import {ProductList} from './interfaces/productList.interface';
+import {ProductListLazy} from './interfaces/productListLazy.interface';
+import {ProductListFull} from './interfaces/productListFull.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,16 @@ export class ProductService {
     return this.http.get<Product[]>(`${environment.api}/api/products`);
   }
 
-  getProductListsForUser(userName: string): Observable<ProductList[]> {
-    return this.http.get<ProductList[]>(`${environment.api}/api/users/productLists/${userName}`);
+  getProductListsForUser(userName: string): Observable<ProductListLazy[]> {
+    return this.http.get<ProductListLazy[]>(`${environment.api}/api/users/productLists/${userName}`);
   }
 
   getProductsForList(listId: string): Observable<Product[]> {
     return this.http.get<Product[]>(`${environment.api}/api/products/productList/${listId}`);
+  }
+
+  saveList(list: ProductListFull): Observable<ProductListFull> {
+    console.log(list);
+    return this.http.post<ProductListFull>(`${environment.api}/api/users/addProductList`, list);
   }
 }
