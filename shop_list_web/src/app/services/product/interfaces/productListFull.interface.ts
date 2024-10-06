@@ -5,5 +5,5 @@ export interface ProductListFull {
     name: string;
     products: Array<Product>;
     userGroupId?: string;
-    userId: string;
+    userId?: string;
 }

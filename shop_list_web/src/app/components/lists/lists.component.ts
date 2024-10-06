@@ -7,6 +7,9 @@ import {ProductService} from '../../services/product/product.service';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {Product} from '../../services/product/interfaces/product.interface';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'lists',
@@ -16,6 +19,8 @@ import {Product} from '../../services/product/interfaces/product.interface';
         MatCardModule,
         MatExpansionModule,
         MatProgressSpinnerModule,
+        MatButtonModule,
+        MatIcon,
     ],
     templateUrl: './lists.component.html',
     styleUrl: './lists.component.scss',
@@ -26,6 +31,7 @@ export class ListsComponent implements OnInit {
         private localStorageService: LocalStorageService,
         private productService: ProductService,
         private cdr: ChangeDetectorRef,
+        private router: Router,
     ) {}
 
     step = signal(0);
@@ -84,5 +90,9 @@ export class ListsComponent implements OnInit {
             this.loading = false;
             this.cdr.markForCheck();
         });
+    }
+
+    protected onEditList(listId: string) {
+        this.router.navigate([`create/${listId}`]);
     }
 }

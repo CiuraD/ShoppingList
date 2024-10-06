@@ -15,6 +15,7 @@ import {Product} from '../../services/product/interfaces/product.interface';
 import {filter, switchMap, iif, catchError, of} from 'rxjs';
 import {EditProductComponent} from '../partials/edit-product/edit-product.component';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {ProductListLazy} from '../../services/product/interfaces/productListLazy.interface';
 
 @Component({
     selector: 'edit-list',
@@ -46,19 +47,23 @@ export class EditListComponent implements OnChanges {
         private cdr: ChangeDetectorRef,
     ) {}
 
-    protected listId: number | undefined | null;
+    protected listId: string | null | undefined;
     protected listForm!: FormGroup;
 
+    protected productList: ProductListLazy | undefined;
+    protected products: Product[] = [];
+
     @Input()
-    set id(listId: number | undefined | null) {
+    set id(listId: string | null) {
         this.listId = listId;
     }
 
     ngOnChanges(changes: SimpleChanges) {
         this.createForm();
+
         if (changes['id']?.currentValue) {
             this.listId = changes['id'].currentValue;
-            // this.getData();
+            this.getData();
         } else {
             this.listId = null;
         }
@@ -72,6 +77,38 @@ export class EditListComponent implements OnChanges {
         });
     }
 
+    private getData(): void {
+        if (this.listId !== null) {
+            this.productService.getProductListLazy(this.listId!).subscribe({
+                next: (response) => {
+                    this.productList = response;
+                    this.listForm.patchValue({
+                        id: this.productList?.id,
+                        name: this.productList?.name,
+                    });
+                },
+                error: (error) => {
+                    console.error('Failed to get product list', error);
+                }
+            }).add(() => {
+                this.cdr.markForCheck();
+            });
+
+            this.productService.getProductsForList(this.listId!).subscribe({
+                next: (response) => {
+                    this.products = response;
+                    this.listForm.patchValue({ products: this.products });
+                },
+                error: (error) => {
+                    console.error('Failed to get products for list', error);
+                }
+            }).add(() => {
+                this.cdr.markForCheck();
+            });
+        }
+
+    }
+
     protected onSubmit(): void {
         if (this.listForm.invalid) {
             this.snackBar.open('Form is invalid - please fill in all required fields', '', {duration: 2000});
@@ -82,12 +119,20 @@ export class EditListComponent implements OnChanges {
         if (this.listId && listFormData.id !== null) {
             console.log('update');
             console.log(listFormData);
+            this.productService.updateList(listFormData).subscribe(
+                (response) => {
+                    this.snackBar.open('List updated', '', {duration: 2000});
+                },
+                (error) => {
+                    this.snackBar.open('Error updating list', '', {duration: 2000});
+                }
+            );
         } else {
             const list: ProductListFull = {
                 ...listFormData,
                 userName: this.localStorageService.getString(LocalStorageService.USERNAME),
             };
-            this.productService.saveList(list).subscribe(
+            this.productService.createList(list).subscribe(
                 (response) => {
                     this.snackBar.open('List saved', '', {duration: 2000});
                 },

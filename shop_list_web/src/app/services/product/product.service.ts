@@ -27,8 +27,16 @@ export class ProductService {
     return this.http.get<Product[]>(`${environment.api}/api/products/productList/${listId}`);
   }
 
-  saveList(list: ProductListFull): Observable<ProductListFull> {
-    console.log(list);
+  getProductListLazy(listId: string): Observable<ProductListLazy> {
+    return this.http.get<ProductListLazy>(`${environment.api}/api/roductLists/${listId}`);
+  }
+
+  createList(list: ProductListFull): Observable<ProductListFull> {
     return this.http.post<ProductListFull>(`${environment.api}/api/users/addProductList`, list);
+  }
+
+  updateList(list: ProductListFull): Observable<ProductListFull> {
+    console.log('updateList', list);
+    return this.http.put<ProductListFull>(`${environment.api}/api/users/updateProductList`, list);
   }
 }

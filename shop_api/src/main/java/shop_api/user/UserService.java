@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 
 import shop_api.product.Product;
 import shop_api.product.ProductRepository;
+import shop_api.product.ProductRequest;
 import shop_api.productList.ProductList;
 import shop_api.productList.ProductListRepository;
 import shop_api.productList.ProductListRequest;
 import shop_api.userGroup.UserGroupRepository;
-
 
 @Service
 public class UserService {
@@ -160,6 +160,48 @@ public class UserService {
             return updatedProductList;
         } else {
             throw new RuntimeException("User not found with ID " + productListRequest.getUserName());
+        }
+    }
+
+    public void updateProductListOnUser(ProductListRequest productListRequest) {
+        logger.info("Received ProductListRequest: {}", productListRequest);
+
+        Optional<ProductList> optionalProductList = productListRepository.findById(productListRequest.getId());
+        if (optionalProductList.isPresent()) {
+            ProductList productList = optionalProductList.get();
+
+            productList.setName(productListRequest.getName());
+
+            List<ProductRequest> productRequests = productListRequest.getProducts();
+            List<Product> updatedProducts = productRequests.stream()
+                .map(productRequest -> {
+                    Product product = productRepository.findById(productRequest.getId()).orElse(null);
+                    if (product != null) {
+                        product.setName(productRequest.getName());
+                        product.setQuantity(productRequest.getQuantity());
+                        product.setQuantityType(productRequest.getQuantityType());
+                        product.setImageId(productRequest.getImageId());
+                    } else {
+                        product = new Product(
+                            productRequest.getName(),
+                            productRequest.getQuantity(),
+                            productRequest.getQuantityType(),
+                            productRequest.getImageId(),
+                            productList.getId()
+                        );
+                    }
+                    return product;
+                })
+                .collect(Collectors.toList());
+
+            updatedProducts = productRepository.saveAll(updatedProducts);
+
+            // Update ProductList with product IDs
+            List<String> productIds = updatedProducts.stream().map(Product::getId).collect(Collectors.toList());
+            productList.setProductsId(productIds);
+            productListRepository.save(productList);
+        } else {
+            logger.warn("Product list with ID: {} not found", productListRequest.getId());
         }
     }
 }

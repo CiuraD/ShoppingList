@@ -34,17 +34,19 @@ export class EditProductComponent implements OnInit {
         private readonly formBuilder: FormBuilder,
         public dialogRef: MatDialogRef<EditProductComponent, Product | null>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-
     ) {}
 
     protected productForm!: FormGroup;
 
     protected readonly QuantityType = QuantityType;
 
+    private productId: string | null = null;
+
     ngOnInit() {
         this.createForm();
 
         if (this.data.item) {
+            this.productId = this.data.item.id;
             this.productForm.patchValue(this.data.item);
         }
     }
@@ -54,12 +56,21 @@ export class EditProductComponent implements OnInit {
             name: ['', Validators.required],
             quantity: ['', Validators.required],
             quantityType: ['', Validators.required],
+            //TODO add img
         });
     }
 
     protected onSubmit() {
         if (this.productForm.valid) {
-            this.dialogRef.close(this.productForm.value);
+
+            let response = this.productForm.value
+
+            if (this.productId) {
+                response.id = this.productId;
+            }
+
+            response.imageId = 'placeholderFromEditProductComponent';
+            this.dialogRef.close(response);
         }
     }
 }
