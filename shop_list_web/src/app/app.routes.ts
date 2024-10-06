@@ -3,6 +3,7 @@ import {AuthGuard} from './services/auth/auth-guard.service';
 import {LoginComponent} from './components/login/login.component';
 import {TestComponent} from './components/test/test.component';
 import {RegistrationComponent} from './components/registration/registration.component';
+import {ListsComponent} from './components/lists/lists.component';
 
 export const routes: Routes = [
     
@@ -13,10 +14,10 @@ export const routes: Routes = [
         data: {icon:'home', showNav: true, showInNav: true, title: 'Home'},
     },
     {
-        path: 'products',
-        component: TestComponent,
+        path: 'lists',
+        component: ListsComponent,
         canActivate: [AuthGuard],
-        data: {icon:'inventory', showNav: true, showInNav: true, title: 'Inventory'},
+        data: {icon:'list', showNav: true, showInNav: true, title: 'Lists'},
     },
     {
         path: 'login',

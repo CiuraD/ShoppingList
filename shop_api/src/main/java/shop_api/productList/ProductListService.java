@@ -6,20 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProductCatalogService {
+public class ProductListService {
 
     @Autowired
-    private ProductCatalogRepository productCatalogRepository;
+    private ProductListRepository productCatalogRepository;
 
-    public List<ProductCatalog> getAllProductCatalogs() {
+    public List<ProductList> getAllProductCatalogs() {
         return productCatalogRepository.findAll();
     }
 
-    public ProductCatalog getProductCatalogById(String id) {
+    public ProductList getProductCatalogById(String id) {
         return productCatalogRepository.findById(id).orElse(null);
     }
 
-    public ProductCatalog saveProductCatalog(ProductCatalog productCatalog) {
+    public ProductList saveProductCatalog(ProductList productCatalog) {
         return productCatalogRepository.save(productCatalog);
     }
 

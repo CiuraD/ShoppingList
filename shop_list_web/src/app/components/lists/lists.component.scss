@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+.product-lists {
+  & > mat-expansion-panel {
+    border: 1px solid rgb(63, 73, 72);
+    margin: 0;
+  }
+}
+
+mat-card-content {
+  margin-top: 20px;
+}

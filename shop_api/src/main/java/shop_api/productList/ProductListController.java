@@ -14,28 +14,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/productCatalogs")
-public class ProductCatalogController {
+public class ProductListController {
 
     @Autowired
-    private ProductCatalogService productCatalogService;
+    private ProductListService productCatalogService;
 
     @GetMapping
-    public List<ProductCatalog> getAllProductCatalogs() {
+    public List<ProductList> getAllProductCatalogs() {
         return productCatalogService.getAllProductCatalogs();
     }
 
     @GetMapping("/{id}")
-    public ProductCatalog getProductCatalogById(@PathVariable String id) {
+    public ProductList getProductCatalogById(@PathVariable String id) {
         return productCatalogService.getProductCatalogById(id);
     }
 
     @PostMapping
-    public ProductCatalog createProductCatalog(@RequestBody ProductCatalog productCatalog) {
+    public ProductList createProductCatalog(@RequestBody ProductList productCatalog) {
         return productCatalogService.saveProductCatalog(productCatalog);
     }
 
     @PutMapping("/{id}")
-    public ProductCatalog updateProductCatalog(@PathVariable String id, @RequestBody ProductCatalog productCatalog) {
+    public ProductList updateProductCatalog(@PathVariable String id, @RequestBody ProductList productCatalog) {
         productCatalog.setId(id);
         return productCatalogService.saveProductCatalog(productCatalog);
     }

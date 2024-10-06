@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import shop_api.productList.ProductCatalog;
 import shop_api.user.User;
 
 @Document(collection = "user_groups")
@@ -14,15 +13,15 @@ public class UserGroup {
     private String id;
     private String name;
     private List<User> users;
-    private List<ProductCatalog> productCatalogs;
+    private List<String> productListsId;
 
     // Constructors
     public UserGroup() {}
 
-    public UserGroup(String name, List<User> users, List<ProductCatalog> productCatalogs) {
+    public UserGroup(String name, List<User> users, List<String> productListsId) {
         this.name = name;
         this.users = users;
-        this.productCatalogs = productCatalogs;
+        this.productListsId = productListsId;
     }
 
     // Getters and Setters
@@ -50,11 +49,11 @@ public class UserGroup {
         this.users = users;
     }
 
-    public List<ProductCatalog> getProductCatalogs() {
-        return productCatalogs;
+    public List<String> getProductListsId() {
+        return productListsId;
     }
 
-    public void setProductCatalogs(List<ProductCatalog> productCatalogs) {
-        this.productCatalogs = productCatalogs;
+    public void setProductListsId(List<String> productListsId) {
+        this.productListsId = productListsId;
     }
 }

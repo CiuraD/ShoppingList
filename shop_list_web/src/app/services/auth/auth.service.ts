@@ -20,6 +20,7 @@ export class AuthService {
         tap((response: any) => {
             const access_token = response.token;
             this.localStorageService.setString(LocalStorageService.TOKEN_KEY, access_token);
+            this.localStorageService.setString(LocalStorageService.USERNAME, username);
         }),
         switchMap(() => of(null))
     )
@@ -32,5 +33,6 @@ export class AuthService {
 
   logout() {
     this.localStorageService.unset(LocalStorageService.TOKEN_KEY);
+    this.localStorageService.unset(LocalStorageService.USERNAME);
 }
 }
