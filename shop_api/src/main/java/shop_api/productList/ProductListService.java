@@ -5,11 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import shop_api.product.ProductRepository;
+
 @Service
 public class ProductListService {
 
     @Autowired
     private ProductListRepository roductListRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<ProductList> getAllProductLists() {
         return roductListRepository.findAll();
@@ -24,6 +29,7 @@ public class ProductListService {
     }
 
     public void deleteProductList(String id) {
+        productRepository.deleteAllByProductListId(id);
         roductListRepository.deleteById(id);
     }
 }

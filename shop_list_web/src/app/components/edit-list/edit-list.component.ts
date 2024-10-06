@@ -16,6 +16,7 @@ import {filter, switchMap, iif, catchError, of} from 'rxjs';
 import {EditProductComponent} from '../partials/edit-product/edit-product.component';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {ProductListLazy} from '../../services/product/interfaces/productListLazy.interface';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'edit-list',
@@ -45,6 +46,7 @@ export class EditListComponent implements OnChanges {
         private readonly dialog: MatDialog,
         private readonly viewContainerRef: ViewContainerRef,
         private cdr: ChangeDetectorRef,
+        private router: Router,
     ) {}
 
     protected listId: string | null | undefined;
@@ -73,7 +75,7 @@ export class EditListComponent implements OnChanges {
         this.listForm = this.formBuilder.group({
             id: [null],
             name: ['', [Validators.required, Validators.maxLength(255)]],
-            products: [[]],
+            products: [[], Validators.required],
         });
     }
 
@@ -116,15 +118,17 @@ export class EditListComponent implements OnChanges {
         }
 
         const listFormData = this.listForm.value;
-        if (this.listId && listFormData.id !== null) {
-            console.log('update');
-            console.log(listFormData);
+        console.log('listFormData', listFormData);
+        console.log('listId', this.listId);
+        if (this.listId && listFormData.id) {
             this.productService.updateList(listFormData).subscribe(
                 (response) => {
                     this.snackBar.open('List updated', '', {duration: 2000});
                 },
                 (error) => {
-                    this.snackBar.open('Error updating list', '', {duration: 2000});
+                    if (error.status !== 200) {
+                        this.snackBar.open('Error updating list', '', {duration: 2000});
+                    }
                 }
             );
         } else {
@@ -170,5 +174,24 @@ export class EditListComponent implements OnChanges {
         }).add(() => {
             this.cdr.markForCheck();
         });
+    }
+
+    protected onDeleteProduct(index: number) {
+        if (this.listForm.value.products[index].id) {
+            this.productService.deleteProduct(this.listForm.value.products[index].id).subscribe(
+                (response) => {
+                    this.snackBar.open('Product deleted', '', {duration: 2000});
+                },
+                (error) => {
+                    this.snackBar.open('Error deleting product', '', {duration: 2000});
+                }
+            );
+        } 
+        this.listForm.value.products.splice(index, 1);
+        this.cdr.markForCheck();
+    }
+
+    protected onClearForm(): void {
+        this.router.navigate(['/create/:id']);
     }
 }

@@ -22,3 +22,10 @@ body {
         padding: 20px;
     }
 }
+
+.content {
+    & > * {
+        max-height: calc(100vh - 104px);
+        overflow-y: auto;
+    }
+}
