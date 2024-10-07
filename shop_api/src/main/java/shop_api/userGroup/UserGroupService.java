@@ -1,9 +1,12 @@
 package shop_api.userGroup;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +69,7 @@ public class UserGroupService {
                         list.removeUserGroupId();
                         productListRepository.save(list);
                     }
-                    
+
                     userObj.removeUserGroup(group.getId());
                     userRepository.save(userObj);
                     userGroupRepository.deleteById(id);
@@ -75,47 +78,63 @@ public class UserGroupService {
         }
     }
 
-    public JoinCode createJoinCode(String creatorUserId, String groupId) {
-        JoinCode joinCode = new JoinCode(groupId, creatorUserId);
+    public JoinCode createJoinCode(String creatorUserName, String groupId) {
+        Optional<User> user = userRepository.findByUsername(creatorUserName);
+        if (!user.isPresent()) {
+            return null;
+        }
+        JoinCode joinCode = new JoinCode(groupId, user.get().getId());
         joinCodeRepository.save(joinCode);
         return joinCode;
     }
 
-    public List<JoinCode> getJoinCodesByUser(String userId) {
-        return joinCodeRepository.findAllByCreatorUserId(userId);
+    public List<JoinCode> getJoinCodesByUser(String userName) {
+        Optional<User> user = userRepository.findByUsername(userName);
+        if (user.isPresent()) {
+            return joinCodeRepository.findAllByCreatorUserId(user.get().getId());
+        } else {
+            return null;
+        }
     }
 
-    public ResponseEntity<Void> joinGroup(String joinCode, String userId) {
-        Optional<JoinCode> code = joinCodeRepository.findByCode(joinCode);
-        if (code.isPresent()) {
+    public ResponseEntity<String> joinGroup(JoinCode joinCode, String userName) {
+        JoinCode joinCodeObj = joinCodeRepository.findById(joinCode.getId()).orElse(null);
 
-            Optional<User> user = userRepository.findByUsername(userId);
-
-            if (user.isPresent()) {
-
-                User userObj = user.get();
-                JoinCode codeObj = code.get();
-
-                Optional<UserGroup> group = userGroupRepository.findById(codeObj.getUserGroupId());
-
-                if (group.isPresent()) {
-                    UserGroup groupObj = group.get();
-
-                    groupObj.addUser(userObj.getId());
-                    userObj.addUserGroup(groupObj.getId());
-
-                    userRepository.save(userObj);
-                    userGroupRepository.save(groupObj);
-
-                    return ResponseEntity.ok().build();
-                } else {
-                    return ResponseEntity.notFound().build();
-                }
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } else {
-            return ResponseEntity.notFound().build();
+        if (joinCodeObj == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Join code not correct");
         }
+
+        Optional<User> user = userRepository.findByUsername(userName);
+        if (user.isPresent()) {
+            User userObj = user.get();
+            Optional<UserGroup> group = userGroupRepository.findById(joinCode.getUserGroupId());
+
+            if (group.isPresent()) {
+                UserGroup groupObj = group.get();
+
+                groupObj.addUser(userObj.getId());
+                userObj.addUserGroup(groupObj.getId());
+
+                userRepository.save(userObj);
+                userGroupRepository.save(groupObj);
+
+                return ResponseEntity.status(HttpStatus.OK).body("User joined group");
+            }
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Group not found");
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");     
+    }
+
+    public List<Map<String, String>> getAllUserGroupsForUser(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            return userGroupRepository.findAllByUsersIdsContaining(user.get().getId())
+                    .stream()
+                    .map(userGroup -> Map.of("id", userGroup.getId(), "name", userGroup.getName()))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

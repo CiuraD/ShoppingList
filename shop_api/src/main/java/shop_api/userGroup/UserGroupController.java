@@ -1,6 +1,7 @@
 package shop_api.userGroup;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -32,19 +32,23 @@ public class UserGroupController {
         userGroupService.deleteUserGroup(id);
     }
 
-    @PostMapping("/code/create/{creatorUserId}/{groupId}")
-    public JoinCode createJoinCode(@PathVariable String creatorUserId, @PathVariable String groupId) {
-        return userGroupService.createJoinCode(creatorUserId, groupId);
+    @GetMapping("/getAllForUser/{userName}")
+    public List<Map<String, String>> getAllUserGroupsForUser(@PathVariable String userName) {
+        return userGroupService.getAllUserGroupsForUser(userName);
     }
 
-    @GetMapping("/code/getByUser/{userId}")
-    public List<JoinCode> getJoinCodesByUser(@PathVariable String userId) {
-        return userGroupService.getJoinCodesByUser(userId);
+    @PostMapping("/code/create")
+    public JoinCode createJoinCode(@RequestBody String creatorUserName, @RequestBody String groupId) {
+        return userGroupService.createJoinCode(creatorUserName, groupId);
     }
 
-    @GetMapping("/code/join/{code}/{userName}")
-    public ResponseEntity<Void> joinGroup(@RequestParam String code, @RequestParam String userName) {
+    @GetMapping("/code/getByUser/{userName}")
+    public List<JoinCode> getJoinCodesByUser(@PathVariable String userName) {
+        return userGroupService.getJoinCodesByUser(userName);
+    }
+
+    @PutMapping("/code/join/{userName}")
+    public ResponseEntity<String> joinGroup(@RequestBody JoinCode code, @PathVariable String userName) {
         return userGroupService.joinGroup(code, userName);
     }
-    
 }
