@@ -19,6 +19,10 @@ public class User {
     private List<String> userGroupId;
     private List<String> productListsId;
 
+    public void addUserGroup(String userGroupId) {
+        this.userGroupId.add(userGroupId);
+    }
+
     public String getId() {
         return id;
     }

@@ -5,23 +5,24 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import shop_api.user.User;
-
 @Document(collection = "user_groups")
 public class UserGroup {
     @Id
     private String id;
     private String name;
-    private List<User> users;
+    private List<String> usersIds;
     private List<String> productListsId;
 
     // Constructors
     public UserGroup() {}
 
-    public UserGroup(String name, List<User> users, List<String> productListsId) {
+    public UserGroup(String name, String userId) {
         this.name = name;
-        this.users = users;
-        this.productListsId = productListsId;
+        this.usersIds.add(userId);
+    }
+
+    public void addUser(String userId) {
+        this.usersIds.add(userId);
     }
 
     // Getters and Setters
@@ -41,12 +42,12 @@ public class UserGroup {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<String> getUsers() {
+        return usersIds;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setUsers(List<String> usersIds) {
+        this.usersIds = usersIds;
     }
 
     public List<String> getProductListsId() {
