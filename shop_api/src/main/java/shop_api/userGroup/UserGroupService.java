@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import shop_api.productList.ProductList;
+import shop_api.productList.ProductListRepository;
 import shop_api.user.User;
 import shop_api.user.UserRepository;
 
@@ -22,6 +24,9 @@ public class UserGroupService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProductListRepository productListRepository;
+
     public List<UserGroup> getAllUserGroups() {
         return userGroupRepository.findAll();
     }
@@ -30,12 +35,44 @@ public class UserGroupService {
         return userGroupRepository.findById(id).orElse(null);
     }
 
-    public UserGroup saveUserGroup(UserGroup userGroup) {
-        return userGroupRepository.save(userGroup);
+    public ResponseEntity<Void> createUserGroup(String userGroupName, String userName) {
+        Optional<User> user = userRepository.findByUsername(userName);
+        if (user.isPresent()) {
+            User userObj = user.get();
+            UserGroup userGroup = new UserGroup(userGroupName, userObj.getId());
+
+            userObj.addUserGroup(userGroup.getId());
+
+            userGroupRepository.save(userGroup);
+            userRepository.save(userObj);
+            
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     public void deleteUserGroup(String id) {
-        userGroupRepository.deleteById(id);
+
+        Optional<UserGroup> userGroup = userGroupRepository.findById(id);
+        if (userGroup.isPresent()) {
+            UserGroup group = userGroup.get();
+            for (String userId : group.getUsers()) {
+                Optional<User> user = userRepository.findById(userId);
+                if (user.isPresent()) {
+                    User userObj = user.get();
+                    List<ProductList> productLists = productListRepository.findAllById(group.getProductListsId());
+
+                    for (ProductList list : productLists) {
+                        list.removeUserGroupId();
+                        productListRepository.save(list);
+                    }
+                    
+                    userObj.removeUserGroup(group.getId());
+                    userRepository.save(userObj);
+                    userGroupRepository.deleteById(id);
+                }
+            }
+        }
     }
 
     public JoinCode createJoinCode(String creatorUserId, String groupId) {
@@ -48,7 +85,7 @@ public class UserGroupService {
         return joinCodeRepository.findAllByCreatorUserId(userId);
     }
 
-    public ResponseEntity joinGroup(String joinCode, String userId) {
+    public ResponseEntity<Void> joinGroup(String joinCode, String userId) {
         Optional<JoinCode> code = joinCodeRepository.findByCode(joinCode);
         if (code.isPresent()) {
 

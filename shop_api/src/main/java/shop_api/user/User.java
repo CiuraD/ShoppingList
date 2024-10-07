@@ -23,6 +23,10 @@ public class User {
         this.userGroupId.add(userGroupId);
     }
 
+    public void removeUserGroup(String userGroupId) {
+        this.userGroupId.remove(userGroupId);
+    }
+
     public String getId() {
         return id;
     }
