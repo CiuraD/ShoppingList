@@ -18,7 +18,7 @@ body {
         border-color: $border-color-primary;
     }
 
-    edit-product {
+    .mat-mdc-dialog-component-host {
         padding: 20px;
     }
 }

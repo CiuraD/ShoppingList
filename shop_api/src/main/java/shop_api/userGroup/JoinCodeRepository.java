@@ -9,4 +9,6 @@ public interface JoinCodeRepository extends MongoRepository<JoinCode, String> {
     List<JoinCode> findAllByCreatorUserId(String creatorUserId);
 
     Optional<JoinCode> findByCode(String code);
+
+    boolean existsByCode(String code);
 }

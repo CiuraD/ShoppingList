@@ -42,7 +42,7 @@ public class UserGroupService {
         Optional<User> user = userRepository.findByUsername(userName);
         if (user.isPresent()) {
             User userObj = user.get();
-            UserGroup userGroup = new UserGroup(userGroupName, userObj.getId());
+            UserGroup userGroup = new UserGroup(userGroupName, userObj.getId(), userObj.getUsername());
 
             userObj.addUserGroup(userGroup.getId());
 
@@ -98,7 +98,7 @@ public class UserGroupService {
     }
 
     public ResponseEntity<String> joinGroup(JoinCode joinCode, String userName) {
-        JoinCode joinCodeObj = joinCodeRepository.findById(joinCode.getId()).orElse(null);
+        JoinCode joinCodeObj = joinCodeRepository.findByCode(joinCode.getCode()).orElse(null);
 
         if (joinCodeObj == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Join code not correct");
@@ -132,7 +132,7 @@ public class UserGroupService {
         if (user.isPresent()) {
             return userGroupRepository.findAllByUsersIdsContaining(user.get().getId())
                     .stream()
-                    .map(userGroup -> Map.of("id", userGroup.getId(), "name", userGroup.getName()))
+                    .map(userGroup -> Map.of("id", userGroup.getId(), "name", userGroup.getName(), "creatorName", userGroup.getCreatorName()))
                     .collect(Collectors.toList());
         }
         return null;

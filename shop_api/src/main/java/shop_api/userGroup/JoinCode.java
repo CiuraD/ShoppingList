@@ -1,5 +1,6 @@
 package shop_api.userGroup;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,10 +12,21 @@ public class JoinCode {
     private String creatorUserId;
     private String code;
 
+    @Autowired
+    private JoinCodeRepository joinCodeRepository;
+
     public JoinCode(String userGroupId, String creatorUserId) {
         this.userGroupId = userGroupId;
         this.creatorUserId = creatorUserId;
-        this.code = generateCode();
+        this.code = generateUniqueCode();
+    }
+
+    private String generateUniqueCode() {
+        String code;
+        do {
+            code = generateCode();
+        } while (joinCodeRepository.existsByCode(code));
+        return code;
     }
 
     private String generateCode() {

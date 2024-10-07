@@ -17,7 +17,7 @@ export const routes: Routes = [
     {
         path: 'register',
         component: RegistrationComponent,
-        data: {icon:'login', showNav: false, showInNav: false, title: 'Register'},
+        data: {icon:'exit_to_app', showNav: false, showInNav: false, title: 'Register'},
     },
     {
         path: 'home',

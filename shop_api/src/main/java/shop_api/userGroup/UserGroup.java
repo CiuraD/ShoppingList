@@ -10,15 +10,17 @@ public class UserGroup {
     @Id
     private String id;
     private String name;
+    private String creatorName;
     private List<String> usersIds;
     private List<String> productListsId;
 
     // Constructors
     public UserGroup() {}
 
-    public UserGroup(String name, String userId) {
+    public UserGroup(String name, String userId, String creatorName) {
         this.name = name;
         this.usersIds.add(userId);
+        this.creatorName = creatorName;
     }
 
     public void addUser(String userId) {
@@ -40,6 +42,10 @@ public class UserGroup {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
     }
 
     public List<String> getUsers() {

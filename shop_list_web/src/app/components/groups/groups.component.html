@@ -1,1 +1,33 @@
-<p>groups works!</p>,
+<mat-card appearance="outlined">
+    <mat-card-title>
+        Groups
+        <button mat-raised-button (click)="onCreateGroup()">
+            <mat-icon>group_add</mat-icon>
+            Create Group
+        </button>
+    </mat-card-title>
+    <mat-card-content>
+        @if (userGroups.length > 0) {
+            <mat-list>
+                @for (group of userGroups; track $index) {
+                    <mat-list-item>
+                        <mat-icon mat-list-icon></mat-icon>
+                        <h3 mat-line>{{group.name}}</h3>
+                        <button mat-fab (click)="onShowCode(group.id)">
+                            <mat-icon>vpn_key</mat-icon>
+                        </button>
+                        @if (isCreator(group.creatorName)) {
+                            <button mat-fab (click)="onDeleteGroup($index)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        } @else {
+                            <button mat-fab (click)="onLeaveGroup($index)">
+                                <mat-icon>group_remove</mat-icon>
+                            </button>
+                        }
+                    </mat-list-item>
+                }
+            </mat-list>
+        }
+    </mat-card-content>
+</mat-card>
