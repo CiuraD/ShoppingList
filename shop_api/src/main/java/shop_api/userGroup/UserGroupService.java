@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ import shop_api.user.UserRepository;
 
 @Service
 public class UserGroupService {
+
+        private static final Logger logger = LoggerFactory.getLogger(UserGroupService.class);
+
 
     @Autowired
     private UserGroupRepository userGroupRepository;
@@ -83,14 +88,18 @@ public class UserGroupService {
         if (!user.isPresent()) {
             return null;
         }
-        JoinCode joinCode = new JoinCode(groupId, user.get().getId());
+        String code = generateUniqueCode();
+        JoinCode joinCode = new JoinCode(groupId, user.get().getId(), code);
         joinCodeRepository.save(joinCode);
+        logger.debug("Join code created with code: " + joinCode.getCode());
         return joinCode;
     }
 
     public List<JoinCode> getJoinCodesByUser(String userName) {
+        logger.info("userName - {}", userName);
         Optional<User> user = userRepository.findByUsername(userName);
         if (user.isPresent()) {
+            logger.info("lista - {}", joinCodeRepository.findAllByCreatorUserId(user.get().getId()).get(0).getCode());
             return joinCodeRepository.findAllByCreatorUserId(user.get().getId());
         } else {
             return null;
@@ -136,5 +145,35 @@ public class UserGroupService {
                     .collect(Collectors.toList());
         }
         return null;
+    }
+
+    public ResponseEntity<Void> updateUserGroup(String id, String userGroupName) {
+        Optional<UserGroup> userGroup = userGroupRepository.findById(id);
+        if (userGroup.isPresent()) {
+            UserGroup group = userGroup.get();
+            group.setName(userGroupName);
+            userGroupRepository.save(group);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    private String generateUniqueCode() {
+        String code;
+        do {
+            code = generateCode();
+        } while (joinCodeRepository.existsByCode(code));
+        return code;
+    }
+
+    private String generateCode() {
+        int length = 10;
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder codeBuilder = new StringBuilder(length);
+        java.util.Random random = new java.util.Random();
+        for (int i = 0; i < length; i++) {
+            codeBuilder.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        return codeBuilder.toString();
     }
 }

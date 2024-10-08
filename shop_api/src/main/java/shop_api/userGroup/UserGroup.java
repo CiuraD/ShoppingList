@@ -1,5 +1,6 @@
 package shop_api.userGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -19,6 +20,8 @@ public class UserGroup {
 
     public UserGroup(String name, String userId, String creatorName) {
         this.name = name;
+        this.usersIds = new ArrayList<>();
+        this.productListsId = new ArrayList<>();
         this.usersIds.add(userId);
         this.creatorName = creatorName;
     }

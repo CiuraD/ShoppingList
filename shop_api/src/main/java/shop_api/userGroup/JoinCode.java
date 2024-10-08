@@ -1,6 +1,5 @@
 package shop_api.userGroup;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,63 +11,51 @@ public class JoinCode {
     private String creatorUserId;
     private String code;
 
-    @Autowired
-    private JoinCodeRepository joinCodeRepository;
-
-    public JoinCode(String userGroupId, String creatorUserId) {
+    public JoinCode(String userGroupId, String creatorUserId, String code) {
         this.userGroupId = userGroupId;
         this.creatorUserId = creatorUserId;
-        this.code = generateUniqueCode();
+        this.code = code;
     }
 
-    private String generateUniqueCode() {
-        String code;
-        do {
-            code = generateCode();
-        } while (joinCodeRepository.existsByCode(code));
-        return code;
-    }
-
-    private String generateCode() {
-        int length = 10;
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder codeBuilder = new StringBuilder(length);
-        java.util.Random random = new java.util.Random();
-        for (int i = 0; i < length; i++) {
-            codeBuilder.append(characters.charAt(random.nextInt(characters.length())));
-        }
-        return codeBuilder.toString();
-        }
-
-        String getId() {
+    public String getId() {
         return id;
     }
 
-    void setId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    String getUserGroupId() {
+    public String getUserGroupId() {
         return userGroupId;
     }
 
-    void setUserGroupId(String userGroupId) {
+    public void setUserGroupId(String userGroupId) {
         this.userGroupId = userGroupId;
     }
 
-    String getCreatorUserId() {
+    public String getCreatorUserId() {
         return creatorUserId;
     }
 
-    void setCreatorUserId(String creatorUserId) {
+    public void setCreatorUserId(String creatorUserId) {
         this.creatorUserId = creatorUserId;
     }
 
-    String getCode() {
+    public String getCode() {
         return code;
     }
 
-    void setCode(String code) {
+    public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "JoinCode{" +
+                "userGroupId='" + userGroupId + '\'' +
+                ", creatorUserId='" + creatorUserId + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
+    
 }

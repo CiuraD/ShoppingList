@@ -2,7 +2,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { QuantityType } from '../../../services/product/quantity-type.enum';
-import {MatCard, MatCardModule} from '@angular/material/card';
+import {MatCardModule} from '@angular/material/card';
 import {FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';

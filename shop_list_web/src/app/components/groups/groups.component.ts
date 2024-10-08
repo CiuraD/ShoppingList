@@ -56,14 +56,38 @@ export class GroupsComponent implements OnInit {
         ).add(() => {
             this.cdr.markForCheck();
         });
+
+        if (this.userGroups.length > 0) {
+
+            this.userGroupService.getInvitationCodesForUser(this.userName).subscribe(
+                (data) => {
+                    console.log('Invitation codes: ', data);
+                    this.invitationCodes = data;
+                },
+                (error) => {
+                    this.snackBar.open('Error while getting invitation codes', 'Close', {duration: 3000});
+                }
+            ).add(() => {
+                this.cdr.markForCheck();
+            });
+        }
+
     }
 
     onShowCode(groupId: string): void {
+
+        console.log('User groups: ', this.userGroups);
+        console.log('Invitation codes: ', this.invitationCodes);
+
+
         let code = this.invitationCodes.find((code) => code.userGroupId === groupId);
+        
 
         if (code === undefined) {
+            console.log('Creating code');
             this.userGroupService.createInvitationCode(this.userName, groupId).subscribe(
                 (data) => {
+                    console.log('Code created: ', data);
                     code = data;
                     this.invitationCodes.push(code);
                 },
@@ -72,11 +96,20 @@ export class GroupsComponent implements OnInit {
                 }
             ).add(() => {
                 this.cdr.markForCheck();
+                if (code) {
+                    this.showCodeDialog(code);
+                }
             });
+        } else {
+            this.showCodeDialog(code);
         }
-        console.log('Code: ', code);
 
         //TODO Implement dialog with code
+        
+    }
+
+    showCodeDialog(code: InvitationCode): void {
+        console.log('Showing code: ', code);
         const dialogRef = this.dialog.open(
             CodeViewComponent,
             {
@@ -98,12 +131,20 @@ export class GroupsComponent implements OnInit {
         const dialogRef = this.dialog.open(
             CreateGroupComponent,
             {
+                data: {item: null},
                 panelClass: 'custom-dialog',
             }
         );
         //TODO Implement dialog for creating group
 
         dialogRef.afterClosed().subscribe(
+            (data) => {
+                if (data.status === 'create') {
+                    this.createGroup(data.groupName.name);
+                } else {
+                    this.snackBar.open('Group creation cancelled', 'Close', {duration: 3000});
+                }
+            },
             (error) => {
                 this.snackBar.open('Error while creating group', 'Close', {duration: 3000});
             }
@@ -139,5 +180,18 @@ export class GroupsComponent implements OnInit {
 
     isCreator(creatorName: string): boolean {
         return creatorName === this.userName;
+    }
+
+    createGroup(groupName: string): void {
+        this.userGroupService.createGroup(this.userName, groupName).subscribe(
+            (data) => {
+                this.userGroups.push(data);
+            },
+            (error) => {
+                this.snackBar.open('Error while creating group', 'Close', {duration: 3000});
+            }
+        ).add(() => {
+            this.cdr.markForCheck();
+        });
     }
 }
