@@ -70,7 +70,7 @@ public class UserGroupController {
     }
 
     @PutMapping("/code/join/{userName}")
-    public ResponseEntity<String> joinGroup(@RequestBody JoinCode code, @PathVariable String userName) {
+    public ResponseEntity<String> joinGroup(@RequestBody String code, @PathVariable String userName) {
         logger.debug("Joining group with code: " + code);
         return userGroupService.joinGroup(code, userName);
     }

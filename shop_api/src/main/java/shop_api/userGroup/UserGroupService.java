@@ -1,5 +1,6 @@
 package shop_api.userGroup;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,7 +61,6 @@ public class UserGroupService {
     }
 
     public void deleteUserGroup(String id) {
-
         Optional<UserGroup> userGroup = userGroupRepository.findById(id);
         if (userGroup.isPresent()) {
             UserGroup group = userGroup.get();
@@ -99,24 +99,25 @@ public class UserGroupService {
         logger.info("userName - {}", userName);
         Optional<User> user = userRepository.findByUsername(userName);
         if (user.isPresent()) {
-            logger.info("lista - {}", joinCodeRepository.findAllByCreatorUserId(user.get().getId()).get(0).getCode());
-            return joinCodeRepository.findAllByCreatorUserId(user.get().getId());
+            List<JoinCode> joinCodes = joinCodeRepository.findAllByCreatorUserId(user.get().getId());
+            return !joinCodes.isEmpty() ? joinCodes : Collections.emptyList();
         } else {
-            return null;
+            return Collections.emptyList();
         }
     }
 
-    public ResponseEntity<String> joinGroup(JoinCode joinCode, String userName) {
-        JoinCode joinCodeObj = joinCodeRepository.findByCode(joinCode.getCode()).orElse(null);
+    public ResponseEntity<String> joinGroup(String joinCode, String userName) {
+        logger.info("Joining group with code: " + joinCode);
+        Optional<JoinCode> joinCodeOptional = joinCodeRepository.findByCode(joinCode);
 
-        if (joinCodeObj == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Join code not correct");
+        if (!joinCodeOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Join code not correct: " + joinCode);
         }
-
+        JoinCode joinCodeObj = joinCodeOptional.get();
         Optional<User> user = userRepository.findByUsername(userName);
         if (user.isPresent()) {
             User userObj = user.get();
-            Optional<UserGroup> group = userGroupRepository.findById(joinCode.getUserGroupId());
+            Optional<UserGroup> group = userGroupRepository.findById(joinCodeObj.getUserGroupId());
 
             if (group.isPresent()) {
                 UserGroup groupObj = group.get();

@@ -5,6 +5,11 @@
             <mat-icon>group_add</mat-icon>
             Create Group
         </button>
+
+        <button mat-raised-button (click)="onJoinGroup()">
+            <mat-icon>handshake</mat-icon>
+            Join Group
+        </button>
     </mat-card-title>
     <mat-card-content>
         @if (userGroups.length > 0) {     

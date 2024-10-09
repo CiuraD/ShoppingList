@@ -30,14 +30,13 @@ export class UserGroupService {
         this.http.delete(`${environment.api}/api/userGroups/delete/${groupId}`).subscribe();
     }
 
-    joinGroup(userName: string, code: InvitationCode): Observable<any> {
-        return this.http.put(`${environment.api}/api/userGroups/join/${userName}`, code);
+    joinGroup(userName: string, code: string): Observable<any> {
+        return this.http.put(`${environment.api}/api/userGroups/code/join/${userName}`, code);
     }
 
     getInvitationCodesForUser(userName: string): Observable<InvitationCode[]> {
-        let response = this.http.get<InvitationCode[]>(`${environment.api}/api/userGroups/code/getByUser/${userName}`);
-        console.log('getInvitationCodesForUser', response);
-        return response;
+        console.log('getInvitationCodesForUser');
+        return this.http.get<InvitationCode[]>(`${environment.api}/api/userGroups/code/getByUser/${userName}`);
     }
 
     createInvitationCode(userName: string, userGroupId: string): Observable<InvitationCode> {
