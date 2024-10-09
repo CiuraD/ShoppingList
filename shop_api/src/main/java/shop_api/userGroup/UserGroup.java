@@ -30,6 +30,14 @@ public class UserGroup {
         this.usersIds.add(userId);
     }
 
+    public void addProductList(String productListId) {
+        this.productListsId.add(productListId);
+    }
+
+    public void removeUser(String userId) {
+        this.usersIds.remove(userId);
+    }
+
     // Getters and Setters
     public String getId() {
         return id;

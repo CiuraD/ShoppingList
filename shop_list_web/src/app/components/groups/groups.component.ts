@@ -152,16 +152,16 @@ export class GroupsComponent implements OnInit {
         //TODO Implement leaving group
 
 
-        // this.userGroupService.leaveGroup(this.userName, groupId).subscribe(
-        //     (data) => {
-        //         this.userGroups.splice(index, 1);
-        //     },
-        //     (error) => {
-        //         this.snackBar.open('Error while leaving group', 'Close', {duration: 3000});
-        //     }
-        // ).add(() => {
-        //     this.cdr.markForCheck();
-        // });
+        this.userGroupService.leaveGroup(this.userName, groupId).subscribe(
+            (data) => {
+                this.getGroups();
+            },
+            (error) => {
+                this.snackBar.open('Error while leaving group', 'Close', {duration: 3000});
+            }
+        ).add(() => {
+            this.cdr.markForCheck();
+        });
     }
 
     onJoinGroup() {

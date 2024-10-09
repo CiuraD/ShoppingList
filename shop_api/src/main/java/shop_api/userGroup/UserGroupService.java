@@ -159,6 +159,23 @@ public class UserGroupService {
         return ResponseEntity.notFound().build();
     }
 
+    public ResponseEntity<Void> leaveGroup(String userName, String groupId) {
+        Optional<User> user = userRepository.findByUsername(userName);
+        if (user.isPresent()) {
+            User userObj = user.get();
+            Optional<UserGroup> group = userGroupRepository.findById(groupId);
+            if (group.isPresent()) {
+                UserGroup groupObj = group.get();
+                groupObj.removeUser(userObj.getId());
+                userObj.removeUserGroup(groupObj.getId());
+                userGroupRepository.save(groupObj);
+                userRepository.save(userObj);
+                return ResponseEntity.ok().build();
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     private String generateUniqueCode() {
         String code;
         do {

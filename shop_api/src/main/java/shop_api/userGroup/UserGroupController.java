@@ -44,6 +44,11 @@ public class UserGroupController {
         return userGroupService.updateUserGroup(id, userGroupName);
     }
 
+    @PutMapping("leave/{userName}")
+    public ResponseEntity<Void> putMethodName(@PathVariable String userName, @RequestBody String gruopId) {
+        return userGroupService.leaveGroup(userName, gruopId);
+    }
+
     @GetMapping("/getAllForUser/{userName}")
     public List<Map<String, String>> getAllUserGroupsForUser(@PathVariable String userName) {
         return userGroupService.getAllUserGroupsForUser(userName);

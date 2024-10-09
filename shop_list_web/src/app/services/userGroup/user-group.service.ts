@@ -34,6 +34,10 @@ export class UserGroupService {
         return this.http.put(`${environment.api}/api/userGroups/code/join/${userName}`, code);
     }
 
+    leaveGroup(userName: string, groupId: string): Observable<any> {
+        return this.http.put(`${environment.api}/api/userGroups/leave/${userName}`, groupId);
+    }
+
     getInvitationCodesForUser(userName: string): Observable<InvitationCode[]> {
         console.log('getInvitationCodesForUser');
         return this.http.get<InvitationCode[]>(`${environment.api}/api/userGroups/code/getByUser/${userName}`);
