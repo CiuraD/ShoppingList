@@ -1,27 +1,41 @@
 package shop_api.userGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import shop_api.user.User;
 
 @Document(collection = "user_groups")
 public class UserGroup {
     @Id
     private String id;
     private String name;
-    private List<User> users;
+    private String creatorName;
+    private List<String> usersIds;
     private List<String> productListsId;
 
     // Constructors
     public UserGroup() {}
 
-    public UserGroup(String name, List<User> users, List<String> productListsId) {
+    public UserGroup(String name, String userId, String creatorName) {
         this.name = name;
-        this.users = users;
-        this.productListsId = productListsId;
+        this.usersIds = new ArrayList<>();
+        this.productListsId = new ArrayList<>();
+        this.usersIds.add(userId);
+        this.creatorName = creatorName;
+    }
+
+    public void addUser(String userId) {
+        this.usersIds.add(userId);
+    }
+
+    public void addProductList(String productListId) {
+        this.productListsId.add(productListId);
+    }
+
+    public void removeUser(String userId) {
+        this.usersIds.remove(userId);
     }
 
     // Getters and Setters
@@ -41,12 +55,16 @@ public class UserGroup {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public String getCreatorName() {
+        return creatorName;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public List<String> getUsers() {
+        return usersIds;
+    }
+
+    public void setUsers(List<String> usersIds) {
+        this.usersIds = usersIds;
     }
 
     public List<String> getProductListsId() {

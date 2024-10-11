@@ -27,6 +27,10 @@ public class ProductList {
         this.userId = userId;
     }
 
+    public void removeUserGroupId() {
+        this.userGroupId = null;
+    }
+
     public String getId() {
         return id;
     }

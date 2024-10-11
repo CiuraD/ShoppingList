@@ -12,6 +12,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {routes} from './app.routes';
 import {MatListModule} from '@angular/material/list';
+import {UserGroupService} from './services/userGroup/user-group.service';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +31,7 @@ import {MatListModule} from '@angular/material/list';
       AuthService,
       TestService,
       ProductService,
+      UserGroupService,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

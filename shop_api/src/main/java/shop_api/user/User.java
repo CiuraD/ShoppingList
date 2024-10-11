@@ -1,5 +1,6 @@
 package shop_api.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -18,6 +19,19 @@ public class User {
     private String email;
     private List<String> userGroupId;
     private List<String> productListsId;
+
+    public User() {
+        this.userGroupId = new ArrayList<>();
+        this.productListsId = new ArrayList<>();
+    }
+
+    public void addUserGroup(String userGroupId) {
+        this.userGroupId.add(userGroupId);
+    }
+
+    public void removeUserGroup(String userGroupId) {
+        this.userGroupId.remove(userGroupId);
+    }
 
     public String getId() {
         return id;

@@ -5,6 +5,7 @@ import {TestComponent} from './components/test/test.component';
 import {RegistrationComponent} from './components/registration/registration.component';
 import {ListsComponent} from './components/lists/lists.component';
 import {EditListComponent} from './components/edit-list/edit-list.component';
+import {GroupsComponent} from './components/groups/groups.component';
 
 export const routes: Routes = [
     
@@ -16,13 +17,19 @@ export const routes: Routes = [
     {
         path: 'register',
         component: RegistrationComponent,
-        data: {icon:'login', showNav: false, showInNav: false, title: 'Register'},
+        data: {icon:'exit_to_app', showNav: false, showInNav: false, title: 'Register'},
     },
     {
         path: 'home',
         component: TestComponent,
         canActivate: [AuthGuard],
         data: {icon:'home', showNav: true, showInNav: true, title: 'Home'},
+    },
+    {
+        path: 'groups',
+        component: GroupsComponent,
+        canActivate: [AuthGuard],
+        data: {icon:'groups', showNav: true, showInNav: true, title: 'Groups'},
     },
     {
         path: 'lists',
