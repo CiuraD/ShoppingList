@@ -204,4 +204,12 @@ public class UserService {
             logger.warn("Product list with ID: {} not found", productListRequest.getId());
         }
     }
+
+    public Map<String, String> getUserId(String username) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user != null) {
+            return Map.of("userId", user.getId());
+        }
+        return null;
+    }
 }

@@ -46,10 +46,27 @@ public class ProductListService {
             if (userGroup != null) {
                 userGroup.addProductList(productListId);
                 userGroupRepository.save(userGroup);
-                
+
                 productList.setUserGroupId(groupId);
                 roductListRepository.save(productList);
                 return ResponseEntity.ok().body("Product list shared with group");
+            }
+            return ResponseEntity.status(404).body("Group not found");
+        }
+        return ResponseEntity.status(404).body("Product list not found");
+    }
+
+    public ResponseEntity<String> unshareListWithGroup(String productListId) {
+        ProductList productList = roductListRepository.findById(productListId).orElse(null);
+        if (productList != null) {
+            UserGroup userGroup = userGroupRepository.findById(productList.getUserGroupId()).orElse(null);
+            if (userGroup != null) {
+                userGroup.removeProductList(productListId);
+                userGroupRepository.save(userGroup);
+
+                productList.setUserGroupId(null);
+                roductListRepository.save(productList);
+                return ResponseEntity.ok().body("Product list unshared with group");
             }
             return ResponseEntity.status(404).body("Group not found");
         }

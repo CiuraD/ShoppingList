@@ -51,4 +51,9 @@ public class ProductListController {
     public ResponseEntity<String> shareListWithGroup(@PathVariable String productListId, @RequestBody String groupId) {
         return productListService.shareListWithGroup(productListId, groupId);
     }
+
+    @PutMapping("/unshareListWithGroup/{productListId}")
+    public ResponseEntity<String> unshareListWithGroup(@PathVariable String productListId) {
+        return productListService.unshareListWithGroup(productListId);
+    }
 }

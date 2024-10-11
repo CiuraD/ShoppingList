@@ -15,6 +15,17 @@
                         <button mat-mini-fab class="mini-button" (click)="onDeleteList(productList.id)">
                             <mat-icon>delete_forever</mat-icon>
                         </button>
+                        @if (isListCreator(productList.userId)) {
+                            @if (isSharedList(productList.userGroupId)) {
+                                <button mat-mini-fab class="mini-button" (click)="onShareList(productList.id)">
+                                    <mat-icon>share</mat-icon>
+                                </button>
+                            } @else {
+                                <button mat-mini-fab class="mini-button" (click)="onUnshareList(productList.id)">
+                                    <mat-icon>share_off</mat-icon>
+                                </button>
+                            }
+                        }
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 

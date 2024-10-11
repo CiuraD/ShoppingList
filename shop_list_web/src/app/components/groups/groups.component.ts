@@ -216,13 +216,13 @@ export class GroupsComponent implements OnInit {
 
     async getGroups(): Promise<void> {
         try {
-          this.userGroups = await this.userGroupService.getUserGroupsForUser(this.userName).toPromise() || [];
-          console.log('Groups fetched', this.userGroups);
-          this.cdr.markForCheck();
-        } catch (error) {
-          console.error('Error fetching groups', error);
+            this.userGroups = await this.userGroupService.getUserGroupsForUser(this.userName).toPromise() || [];
+            console.log('Groups fetched', this.userGroups);
+            this.cdr.markForCheck();
+        }catch (error) {
+            console.error('Error fetching groups', error);
         }
-      }
+    }
 
       async getCodes(): Promise<void> {
         try {

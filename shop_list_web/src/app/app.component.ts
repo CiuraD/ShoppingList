@@ -13,6 +13,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {routes} from './app.routes';
 import {MatListModule} from '@angular/material/list';
 import {UserGroupService} from './services/userGroup/user-group.service';
+import {UserService} from './services/user/user.service';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,7 @@ import {UserGroupService} from './services/userGroup/user-group.service';
       TestService,
       ProductService,
       UserGroupService,
+      UserService,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

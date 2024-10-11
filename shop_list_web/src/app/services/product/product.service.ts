@@ -1,3 +1,4 @@
+import { userGroup } from './../userGroup/interfaces/userGrup.interface';
 import {HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
@@ -47,5 +48,13 @@ export class ProductService {
 
   deleteList(listId: string): Observable<any> {
     return this.http.delete<any>(`${environment.api}/api/productLists/delete/${listId}`);
+  }
+
+  shareList(listId: string, userGroupId: string): Observable<any> {
+    return this.http.put<any>(`${environment.api}/api/productLists/shareListWithGroup/${listId}`, userGroupId);
+  }
+
+  unshareList(listId: string): Observable<any> {
+    return this.http.put<any>(`${environment.api}/api/productLists/unshareListWithGroup/${listId}`,{});
   }
 }
