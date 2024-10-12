@@ -37,7 +37,6 @@ export class CodeViewComponent implements OnInit {
     };
 
     ngOnInit() {
-        console.log(this.data);
         this.code = this.data;
         this.cdr.markForCheck();
     }

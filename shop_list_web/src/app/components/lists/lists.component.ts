@@ -68,6 +68,7 @@ export class ListsComponent implements OnInit {
         this.userName = this.localStorageService.getString(LocalStorageService.USERNAME) || '';
         this.getProductLists();
         this.getUserId();
+        this.getGroups();
     }
 
     getProductLists() {
@@ -125,9 +126,7 @@ export class ListsComponent implements OnInit {
     getUserId() {
         this.userService.getUserId(this.userName).subscribe({
             next: response => {
-                console.log('userId', response);
                 this.userId = response.userId;
-                console.log('userId', this.userId);
                 this.cdr.markForCheck();
             },
             error: error => {
@@ -137,12 +136,10 @@ export class ListsComponent implements OnInit {
     }
 
     isListCreator(creatorId: string): boolean {
-        console.log('creatorId', creatorId, 'userId', this.userId);
         return creatorId === this.userId;
     }
 
     isSharedList(groupId: string | undefined): boolean {
-        console.log('groupId', groupId);
         return groupId !== undefined;
     }
 
@@ -172,7 +169,7 @@ export class ListsComponent implements OnInit {
     }
 
     protected onShareList(listId: string) {
-        this.getGroups();
+        console.log('this.userGroups', this.userGroups);
         const dialogRef = this.dialog.open(ShareListComponent, {
             panelClass: 'custom-dialog',
             data: {
@@ -183,8 +180,9 @@ export class ListsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe({
             next: data => {
-                if (data !== null) {
-                    this.shareListWithGroup(listId, data);
+                console.log('data', data);
+                if (data !== undefined) {
+                    this.shareListWithGroup(listId, data.id);
                 }
             },
             error: error => {

@@ -12,7 +12,6 @@ export class UserService {
     ) {}
 
     getUserId(username: string): Observable<any> {
-        console.log('getUserId', username);
         return this.http.get<string>(`${environment.api}/api/users/getUserId/${username}`);
     }
 }

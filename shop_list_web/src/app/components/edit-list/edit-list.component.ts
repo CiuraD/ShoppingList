@@ -118,8 +118,6 @@ export class EditListComponent implements OnChanges {
         }
 
         const listFormData = this.listForm.value;
-        console.log('listFormData', listFormData);
-        console.log('listId', this.listId);
         if (this.listId && listFormData.id) {
             this.productService.updateList(listFormData).subscribe(
                 (response) => {

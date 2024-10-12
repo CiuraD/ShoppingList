@@ -18,7 +18,6 @@ export class UserGroupService {
     }
 
     createGroup(userName: string, groupName: string): Observable<userGroup> {
-        console.log('createGroup', userName, groupName);
         return this.http.post<userGroup>(`${environment.api}/api/userGroups/create`, {userName, groupName});
     }
 
@@ -39,15 +38,11 @@ export class UserGroupService {
     }
 
     getInvitationCodesForUser(userName: string): Observable<InvitationCode[]> {
-        console.log('getInvitationCodesForUser');
         return this.http.get<InvitationCode[]>(`${environment.api}/api/userGroups/code/getByUser/${userName}`);
     }
 
     createInvitationCode(userName: string, userGroupId: string): Observable<InvitationCode> {
-        console.log('createInvitationCode', userName, userGroupId);
-        let response = this.http.post<InvitationCode>(`${environment.api}/api/userGroups/code/create`, {userName, userGroupId});
-        console.log('response', response);
-        return response;
+        return this.http.post<InvitationCode>(`${environment.api}/api/userGroups/code/create`, {userName, userGroupId});
     }
 
 }

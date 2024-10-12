@@ -38,7 +38,6 @@ export class ProductService {
   }
 
   updateList(list: ProductListFull): Observable<ProductListFull> {
-    console.log('updateList', list);
     return this.http.put<ProductListFull>(`${environment.api}/api/users/updateProductList`, list);
   }
 

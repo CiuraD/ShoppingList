@@ -48,7 +48,6 @@ export class GroupsComponent implements OnInit {
     protected userName: string = '';
 
     async ngOnInit() {
-        console.log('Groups component initialized');
         this.userName = this.localStorageService.getString(LocalStorageService.USERNAME) || '';
 
         await this.getGroups();
@@ -56,20 +55,11 @@ export class GroupsComponent implements OnInit {
     }
 
     onShowCode(groupId: string): void {
-
-        console.log('User groups: ', this.userGroups);
-        console.log('Invitation codes: ', this.invitationCodes);
-
-
         let code = this.invitationCodes.find((code) => code.userGroupId === groupId);
-        
-        console.log('bruh code' , code);
 
         if (code === undefined) {
-            console.log('Creating code' , code);
             this.userGroupService.createInvitationCode(this.userName, groupId).subscribe(
                 (data) => {
-                    console.log('Code created: ', data);
                     code = data;
                     this.invitationCodes.push(code);
                 },
@@ -85,13 +75,9 @@ export class GroupsComponent implements OnInit {
         } else {
             this.showCodeDialog(code);
         }
-
-        //TODO Implement dialog with code
-        
     }
 
     showCodeDialog(code: InvitationCode): void {
-        console.log('Showing code: ', code);
         const dialogRef = this.dialog.open(
             CodeViewComponent,
             {
@@ -120,12 +106,10 @@ export class GroupsComponent implements OnInit {
                 panelClass: 'custom-dialog',
             }
         );
-        //TODO Implement dialog for creating group
 
         dialogRef.afterClosed().subscribe(
             (data) => {
                 if (data.status === 'create') {
-                    console.log('Creating group: ', data.groupName.name);
                     this.createGroup(data.groupName.name);
                 } else {
                     this.snackBar.open('Group creation cancelled', 'Close', {duration: 3000});
@@ -148,10 +132,6 @@ export class GroupsComponent implements OnInit {
 
     onLeaveGroup(index: number): void {
         const groupId = this.userGroups[index].id;
-        console.log('Leaving group: ', groupId);
-        //TODO Implement leaving group
-
-
         this.userGroupService.leaveGroup(this.userName, groupId).subscribe(
             (data) => {
                 this.getGroups();
@@ -217,7 +197,6 @@ export class GroupsComponent implements OnInit {
     async getGroups(): Promise<void> {
         try {
             this.userGroups = await this.userGroupService.getUserGroupsForUser(this.userName).toPromise() || [];
-            console.log('Groups fetched', this.userGroups);
             this.cdr.markForCheck();
         }catch (error) {
             console.error('Error fetching groups', error);
@@ -228,7 +207,6 @@ export class GroupsComponent implements OnInit {
         try {
             if (this.userGroups.length > 0) {
                 this.invitationCodes = await this.userGroupService.getInvitationCodesForUser(this.userName).toPromise() || [];
-                console.log('Codes fetched', this.invitationCodes );
             }
         } catch (error) {
             console.error('Error fetching codes', error);

@@ -12,10 +12,10 @@
                         <button mat-mini-fab class="mini-button" (click)="onEditList(productList.id)">
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <button mat-mini-fab class="mini-button" (click)="onDeleteList(productList.id)">
-                            <mat-icon>delete_forever</mat-icon>
-                        </button>
                         @if (isListCreator(productList.userId)) {
+                            <button mat-mini-fab class="mini-button" (click)="onDeleteList(productList.id)">
+                                <mat-icon>delete_forever</mat-icon>
+                            </button>
                             @if (isSharedList(productList.userGroupId)) {
                                 <button mat-mini-fab class="mini-button" (click)="onShareList(productList.id)">
                                     <mat-icon>share</mat-icon>
