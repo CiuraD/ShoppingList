@@ -64,7 +64,7 @@ public class UserGroupController {
         return userGroupService.createJoinCode(creatorUserName, groupId);
     }
 
-    // Get all codes for groups that the user is a member of
+    // Get all codes for groups that the user is a member of given the username
     @GetMapping("/code/getByUser/{userName}")
     public List<JoinCode> getJoinCodesByUser(@PathVariable String userName) {
         

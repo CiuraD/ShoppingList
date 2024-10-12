@@ -19,6 +19,7 @@ import shop_api.product.ProductRequest;
 import shop_api.productList.ProductList;
 import shop_api.productList.ProductListRepository;
 import shop_api.productList.ProductListRequest;
+import shop_api.userGroup.UserGroup;
 import shop_api.userGroup.UserGroupRepository;
 
 @Service
@@ -102,10 +103,17 @@ public class UserService {
             if (userGroupIds == null) {
                 return userProductLists;    
             }
-            List<ProductList> groupProductLists = userGroupRepository.findAllById(userGroupIds)
-                .stream()
-                .flatMap(group -> productListRepository.findAllById(group.getProductListsId()).stream())
+
+            List<UserGroup> userGroups = userGroupRepository.findAllById(userGroupIds);
+            logger.info("User groups: " + userGroups);
+            
+            List<String> groupProductListIds = userGroups.stream()
+                .map(UserGroup::getProductListsId)
+                .flatMap(List::stream)
                 .collect(Collectors.toList());
+
+            List<ProductList> groupProductLists = productListRepository.findAllById(groupProductListIds);
+            logger.info("Group product lists: " + groupProductLists);
 
             userProductLists.addAll(groupProductLists);
             Map<String, ProductList> uniqueProductListsMap = userProductLists.stream()
@@ -203,5 +211,13 @@ public class UserService {
         } else {
             logger.warn("Product list with ID: {} not found", productListRequest.getId());
         }
+    }
+
+    public Map<String, String> getUserId(String username) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user != null) {
+            return Map.of("userId", user.getId());
+        }
+        return null;
     }
 }

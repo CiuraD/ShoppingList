@@ -1,8 +1,10 @@
 package shop_api.productList;
 
+import java.sql.Array;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,5 +45,15 @@ public class ProductListController {
     @DeleteMapping("/delete/{id}")
     public void deleteProductList(@PathVariable String id) {
         productListService.deleteProductList(id);
+    }
+
+    @PutMapping("/shareListWithGroup/{productListId}")
+    public ResponseEntity<String> shareListWithGroup(@PathVariable String productListId, @RequestBody String groupId) {
+        return productListService.shareListWithGroup(productListId, groupId);
+    }
+
+    @PutMapping("/unshareListWithGroup/{productListId}")
+    public ResponseEntity<String> unshareListWithGroup(@PathVariable String productListId) {
+        return productListService.unshareListWithGroup(productListId);
     }
 }

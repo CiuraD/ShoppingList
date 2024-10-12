@@ -61,6 +61,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getUserId/{username}")
+    public Map<String, String> getUserId(@PathVariable String username) {
+        return userService.getUserId(username);
+    }
+
     @GetMapping("/productLists/{username}")
     public ResponseEntity<?> getProductListsForUserAndGroups(@PathVariable String username) {
         try {

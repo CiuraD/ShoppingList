@@ -38,6 +38,10 @@ public class UserGroup {
         this.usersIds.remove(userId);
     }
 
+    public void removeProductList(String productListId) {
+        this.productListsId.remove(productListId);
+    }
+
     // Getters and Setters
     public String getId() {
         return id;
