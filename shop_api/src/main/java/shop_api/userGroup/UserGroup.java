@@ -1,28 +1,45 @@
 package shop_api.userGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import shop_api.productList.ProductCatalog;
-import shop_api.user.User;
 
 @Document(collection = "user_groups")
 public class UserGroup {
     @Id
     private String id;
     private String name;
-    private List<User> users;
-    private List<ProductCatalog> productCatalogs;
+    private String creatorName;
+    private List<String> usersIds;
+    private List<String> productListsId;
 
     // Constructors
     public UserGroup() {}
 
-    public UserGroup(String name, List<User> users, List<ProductCatalog> productCatalogs) {
+    public UserGroup(String name, String userId, String creatorName) {
         this.name = name;
-        this.users = users;
-        this.productCatalogs = productCatalogs;
+        this.usersIds = new ArrayList<>();
+        this.productListsId = new ArrayList<>();
+        this.usersIds.add(userId);
+        this.creatorName = creatorName;
+    }
+
+    public void addUser(String userId) {
+        this.usersIds.add(userId);
+    }
+
+    public void addProductList(String productListId) {
+        this.productListsId.add(productListId);
+    }
+
+    public void removeUser(String userId) {
+        this.usersIds.remove(userId);
+    }
+
+    public void removeProductList(String productListId) {
+        this.productListsId.remove(productListId);
     }
 
     // Getters and Setters
@@ -42,19 +59,23 @@ public class UserGroup {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public String getCreatorName() {
+        return creatorName;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public List<String> getUsers() {
+        return usersIds;
     }
 
-    public List<ProductCatalog> getProductCatalogs() {
-        return productCatalogs;
+    public void setUsers(List<String> usersIds) {
+        this.usersIds = usersIds;
     }
 
-    public void setProductCatalogs(List<ProductCatalog> productCatalogs) {
-        this.productCatalogs = productCatalogs;
+    public List<String> getProductListsId() {
+        return productListsId;
+    }
+
+    public void setProductListsId(List<String> productListsId) {
+        this.productListsId = productListsId;
     }
 }

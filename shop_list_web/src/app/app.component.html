@@ -1,0 +1,47 @@
+<mat-toolbar color="mat-accent">
+    <div class="current-route">
+        <mat-icon>{{icon}}</mat-icon>
+        <span>{{title}}</span>
+    </div>
+    <div class="app-title">
+        <span>Shopping list</span>
+    </div>
+    <div class="actions">
+        @if (title === 'Login') {
+            <button mat-raised-button (click)="navigateTo('register')">
+                <mat-icon>login</mat-icon>
+                <span>register</span>
+            </button>
+        } @else if (title === 'Register') {
+            <button mat-raised-button (click)="navigateTo('login')">
+                <mat-icon>login</mat-icon>
+                <span>Login</span>
+            </button>
+        } @else {
+            <button mat-raised-button (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Logout</span>
+            </button>
+        }
+    </div>
+</mat-toolbar>
+<div class="container">
+    <mat-sidenav color="mat-accent" mode="side" [opened]="showNav">
+        <mat-list>
+            @for (navElement of navTable; track $index) {
+                <button mat-flat-button
+                        (click)="navigateTo(navElement.path)"
+                        [class.route-active]="title === navElement.title"
+                        class="nav-button"
+                >
+                    <mat-icon>{{navElement.icon}}</mat-icon>
+                    <span>{{navElement.title}}</span>
+                </button>
+            }
+        </mat-list>
+    </mat-sidenav>
+    <div class="content">
+        <router-outlet/>
+    </div>  
+    <div class="spacer" style="height: 100%; width: 20%;"></div>
+</div>

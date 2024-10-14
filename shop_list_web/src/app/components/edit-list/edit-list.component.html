@@ -1,0 +1,52 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <mat-card-title>
+            Edit List
+            <button mat-mini-fab class="mini-button" type="button" (click)="onClearForm()">
+                <mat-icon>clear_all</mat-icon>
+            </button>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form id="productListEditForm" [formGroup]="listForm" (ngSubmit)="onSubmit()">
+            <mat-form-field>
+                <mat-label>List Name</mat-label>
+                <input matInput placeholder="List Name" formControlName="name">
+            </mat-form-field>
+            <mat-card appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>Products</mat-card-title>
+                    <button mat-mini-fab class="mini-button" type="button" (click)="onEditProduct(null)">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </mat-card-header>
+                @if (listForm.value.products.length > 0) {
+                    <mat-card-content>
+                            @for (product of listForm.value.products; track $index) {
+                                <mat-card class="product" appearance="outlined">
+                                    <mat-card-header>
+                                        <mat-card-title>{{product.name}}</mat-card-title>
+                                        <mat-card-subtitle>
+                                            <span>{{product.quantity}}</span>
+                                            - 
+                                            <span>{{product.quantityType}}</span>
+                                        </mat-card-subtitle>
+                                        <button mat-mini-fab class="mini-button edit" type="button" (click)="onEditProduct($index)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <button mat-mini-fab class="mini-button delete" type="button" (click)="onDeleteProduct($index)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        IMG PLACEHOLDER
+                                    </mat-card-content>
+                                </mat-card>
+                            }
+                    </mat-card-content>
+                }
+            </mat-card>
+            <button mat-raised-button color="primary" type="submit">Save</button>
+        </form>
+    </mat-card-content>
+</mat-card>
