@@ -180,11 +180,19 @@ public class UserService {
 
             productList.setName(productListRequest.getName());
 
+            logger.info("Updating product list: {}", productList);
+
             List<ProductRequest> productRequests = productListRequest.getProducts();
             List<Product> updatedProducts = productRequests.stream()
                 .map(productRequest -> {
-                    Product product = productRepository.findById(productRequest.getId()).orElse(null);
-                    if (product != null) {
+                    Product product;
+                    if (productRequest.getId() != null) {
+                        product = productRepository.findById(productRequest.getId()).orElse(null);
+                        if (product == null) {
+                            logger.warn("Product with ID: {} not found", productRequest.getId());
+                            return null;
+                        }
+                        product = productRepository.findById(productRequest.getId()).orElse(null);
                         product.setName(productRequest.getName());
                         product.setQuantity(productRequest.getQuantity());
                         product.setQuantityType(productRequest.getQuantityType());
@@ -201,6 +209,8 @@ public class UserService {
                     return product;
                 })
                 .collect(Collectors.toList());
+            
+            logger.info("Updated products: {}", updatedProducts);
 
             updatedProducts = productRepository.saveAll(updatedProducts);
 
@@ -208,6 +218,8 @@ public class UserService {
             List<String> productIds = updatedProducts.stream().map(Product::getId).collect(Collectors.toList());
             productList.setProductsId(productIds);
             productListRepository.save(productList);
+
+            logger.info("Product list updated");
         } else {
             logger.warn("Product list with ID: {} not found", productListRequest.getId());
         }
