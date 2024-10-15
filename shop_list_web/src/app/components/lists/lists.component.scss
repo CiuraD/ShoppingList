@@ -1,0 +1,16 @@
+@import '../../../variables.scss';
+
+:host {
+  display: block;
+}
+
+.product-lists {
+  & > mat-expansion-panel {
+    border: 1px solid $border-color-primary;
+    margin: 0;
+  }
+}
+
+mat-card-content {
+  margin-top: 20px;
+}

@@ -13,7 +13,18 @@ public class Product {
     private double quantity;
     private QuantityType quantityType;
     private String imageId;
-    
+    private String productListId;
+
+    public Product(String name, double quantity, QuantityType quantityType, String imageId, String productListId) {
+        if (productListId == null || productListId.isEmpty()) {
+            throw new IllegalArgumentException("productListId cannot be null or empty");
+        }
+        this.name = name;
+        this.quantity = quantity;
+        this.quantityType = quantityType;
+        this.imageId = imageId;
+        this.productListId = productListId;
+    }
 
     public void setId(String id) {
         this.id = id;
@@ -34,6 +45,10 @@ public class Product {
     public void setImageId(String imageId) {
         this.imageId = imageId;
     }
+
+    public void setProductListId(String productListId) {
+        this.productListId = productListId;
+    }
     
     public String getId() {
         return id;
@@ -53,5 +68,9 @@ public class Product {
 
     public String getImageId() {
         return imageId;
+    }
+
+    public String getProductListId() {
+        return productListId;
     }
 }
