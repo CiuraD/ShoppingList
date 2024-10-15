@@ -1,18 +1,24 @@
-<div class="login-container">
-  <h2>Login</h2>
-  <form (ngSubmit)="login()">
-    <div>
-      <label for="username">Username:</label>
-      <input type="text" id="username" [(ngModel)]="username" name="username" required>
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" id="password" [(ngModel)]="password" name="password" required>
-    </div>
-    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-    <button type="submit">Login</button>
-  </form>
-  <div>
-    <a routerLink="/register">Register</a>
-  </div>
-</div>
+<mat-card appearance="outlined" class="mat-mdc-card-outlined mdc-card--outlined">
+  <mat-card-header>
+    <mat-card-title><h2>Login</h2></mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="login()">
+      <mat-form-field>
+        <input matInput type="text" [(ngModel)]="username" name="username" placeholder="Username" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" [(ngModel)]="password" name="password" placeholder="Password" required>
+      </mat-form-field>
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+      <button mat-raised-button color="primary" type="submit">
+        <mat-icon>login</mat-icon>
+        Login
+      </button>
+      <button mat-raised-button color="accent" type="button" (click)="onRegister()">
+        <mat-icon>exit_to_app</mat-icon>
+        Register
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -40,7 +40,7 @@ import {UserService} from './services/user/user.service';
 })
 export class AppComponent implements OnInit {
 
-  showNav: boolean = true;
+  showNav: boolean = false;
   icon: string = '';
   title: string = '';
   navTable: any = [];
@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
     ).subscribe(() => {
         const routeData = this.activatedRoute.firstChild?.snapshot.data;
         if (routeData) {
-            this.showNav = routeData['showNav'] !== false;
+            this.showNav = routeData['showNav'];
             this.icon = routeData['icon'] || '';
             this.title = routeData['title'] || '';
         }
