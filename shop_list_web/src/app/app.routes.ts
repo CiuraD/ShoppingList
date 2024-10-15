@@ -46,6 +46,7 @@ export const routes: Routes = [
     {
         path: '**',
         redirectTo: 'login',
+        data: {icon:'login', showNav: false, showInNav: false, title: 'Login'},
     }
     
 ];
