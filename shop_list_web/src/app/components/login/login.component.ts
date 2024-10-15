@@ -27,8 +27,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
-username: string = '';
-password: string = '';
 errorMessage: string = '';
 
   constructor(
@@ -69,7 +67,8 @@ errorMessage: string = '';
     }
 
     async login() {
-        this.authService.login(this.username, this.password).subscribe({
+        const { username, password } = this.loginForm.value;
+        this.authService.login(username, password).subscribe({
             next: response => {
                 this.router.navigate(['/home']); 
             },
