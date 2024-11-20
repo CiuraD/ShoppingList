@@ -14,3 +14,17 @@
 mat-card-content {
   margin-top: 20px;
 }
+
+mat-panel-title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+
+  .button-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    flex-direction: row;
+  }
+}
