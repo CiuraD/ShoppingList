@@ -5,5 +5,5 @@ export interface Product {
     name: string;
     quantity: number;
     quantityType: QuantityType;
-    imageId: string;
+    imageString: string;
 }

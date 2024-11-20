@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import shop_api.services.ImageService;
 
 @RestController
 @RequestMapping("/api/products")
@@ -23,9 +20,6 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private ImageService imageService;
 
     @GetMapping
     public List<Product> getAllProducts() {
@@ -52,19 +46,19 @@ public class ProductController {
         productService.deleteProduct(id);
     }
 
-    @PostMapping("/{id}/image")
-    public String uploadImage(@PathVariable String id, @RequestParam("file") MultipartFile file) throws IOException {
-        String imageId = imageService.storeImage(file);
-        Product product = productService.getProductById(id);
-        product.setImageId(imageId);
-        productService.saveProduct(product);
-        return imageId;
+    @PutMapping("/image/{productId}")
+    public void uploadImage(@PathVariable String productId, @RequestBody String imgageString) throws IOException {
+       productService.uploadImage(productId, imgageString);
     }
 
-    @GetMapping("/{id}/image")
-    public byte[] getImage(@PathVariable String id) throws IOException {
-        Product product = productService.getProductById(id);
-        return imageService.getImage(product.getImageId());
+    @GetMapping("image/{productId}")
+    public String getImage(@PathVariable String productId) throws IOException {
+        return productService.getImage(productId);
+    }
+
+    @DeleteMapping("/image/{productId}")
+    public void deleteImage(@PathVariable String productId) {
+        productService.deleteImage(productId);
     }
 
     @GetMapping("/productList/{productListId}")

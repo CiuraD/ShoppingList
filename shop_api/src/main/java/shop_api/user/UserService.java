@@ -196,7 +196,7 @@ public class UserService {
                         product.setName(productRequest.getName());
                         product.setQuantity(productRequest.getQuantity());
                         product.setQuantityType(productRequest.getQuantityType());
-                        product.setImageId(productRequest.getImageId());
+                        product.setImageString(productRequest.getImageId());
                     } else {
                         product = new Product(
                             productRequest.getName(),
