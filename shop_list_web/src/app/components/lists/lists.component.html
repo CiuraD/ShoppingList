@@ -8,24 +8,26 @@
                 <mat-expansion-panel [expanded]="step() === $index" (opened)="setStep($index); getProducts(productList.id)" hideToggle>
                 <mat-expansion-panel-header>
                     <mat-panel-title> 
-                        {{productList.name}} 
-                        <button mat-mini-fab class="mini-button" (click)="onEditList(productList.id)">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        @if (isListCreator(productList.userId)) {
-                            <button mat-mini-fab class="mini-button" (click)="onDeleteList(productList.id)">
-                                <mat-icon>delete_forever</mat-icon>
+                        <label>{{productList.name}}</label>
+                        <div class="button-container">
+                            <button mat-mini-fab class="mini-button" (click)="onEditList(productList.id)">
+                                <mat-icon>edit</mat-icon>
                             </button>
-                            @if (isSharedList(productList.userGroupId)) {
-                                <button mat-mini-fab class="mini-button" (click)="onShareList(productList.id)">
-                                    <mat-icon>share</mat-icon>
+                            @if (isListCreator(productList.userId)) {
+                                <button mat-mini-fab class="mini-button" (click)="onDeleteList(productList.id)">
+                                    <mat-icon>delete_forever</mat-icon>
                                 </button>
-                            } @else {
-                                <button mat-mini-fab class="mini-button" (click)="onUnshareList(productList.id)">
-                                    <mat-icon>share_off</mat-icon>
-                                </button>
+                                @if (isSharedList(productList.userGroupId)) {
+                                    <button mat-mini-fab class="mini-button" (click)="onShareList(productList.id)">
+                                        <mat-icon>share</mat-icon>
+                                    </button>
+                                } @else {
+                                    <button mat-mini-fab class="mini-button" (click)="onUnshareList(productList.id)">
+                                        <mat-icon>share_off</mat-icon>
+                                    </button>
+                                }
                             }
-                        }
+                        </div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -45,7 +47,7 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                PLACEHOLDER   
+                                <image-viewer [productId]="product.id"></image-viewer>   
                             </mat-card-content>
                         </mat-card>
                     }

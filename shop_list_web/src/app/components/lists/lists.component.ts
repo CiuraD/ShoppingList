@@ -15,6 +15,7 @@ import {UserGroupService} from '../../services/userGroup/user-group.service';
 import {UserService} from '../../services/user/user.service';
 import {userGroup} from '../../services/userGroup/interfaces/userGrup.interface';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { ImageViewerComponent } from "../partials/image-viewer/image-viewer.component";
 
 @Component({
     selector: 'lists',
@@ -26,8 +27,8 @@ import {MatDialog, MatDialogModule} from '@angular/material/dialog';
         MatProgressSpinnerModule,
         MatButtonModule,
         MatIcon,
-        ShareListComponent,
         MatDialogModule,
+        ImageViewerComponent
     ],
     templateUrl: './lists.component.html',
     styleUrl: './lists.component.scss',
