@@ -14,6 +14,7 @@ import {routes} from './app.routes';
 import {MatListModule} from '@angular/material/list';
 import {UserGroupService} from './services/userGroup/user-group.service';
 import {UserService} from './services/user/user.service';
+import {ImageService} from './services/image/image.service';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +35,7 @@ import {UserService} from './services/user/user.service';
       ProductService,
       UserGroupService,
       UserService,
+      ImageService,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

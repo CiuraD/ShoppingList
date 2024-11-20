@@ -30,4 +30,28 @@ public class ProductService {
     public List<Product> getProductsByProductListId(String productListId) {
         return productRepository.findByProductListId(productListId);
     }
+
+    public void uploadImage(String productId, String imageString) {
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product != null) {
+            product.setImageString(imageString);
+            productRepository.save(product);
+        }
+    }
+
+    public String getImage(String productId) {
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product != null) {
+            return product.getImageString();
+        }
+        return null;
+    }
+
+    public void deleteImage(String productId) {
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product != null) {
+            product.setImageString("");
+            productRepository.save(product);
+        }
+    }
 }
