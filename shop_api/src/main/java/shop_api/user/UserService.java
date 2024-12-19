@@ -55,7 +55,7 @@ public class UserService {
             return ResponseEntity.status(500).body("Registration failed");
         }
         
-        return ResponseEntity.ok(Map.of("message", "Registration successful"));
+        return ResponseEntity.ok().body(Map.of("message", "Registration successful"));
     }
 
     public User updateUser(String id, User user) {
