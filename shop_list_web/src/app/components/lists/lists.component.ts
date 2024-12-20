@@ -141,7 +141,7 @@ export class ListsComponent implements OnInit {
     }
 
     isSharedList(groupId: string | undefined): boolean {
-        return groupId !== undefined;
+        return groupId !== undefined && groupId !== '' && groupId !== null; 
     }
 
     shareListWithGroup(listId: string, userGroupId: string) {

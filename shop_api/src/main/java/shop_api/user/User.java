@@ -57,6 +57,10 @@ public class User {
         return productListsId;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
