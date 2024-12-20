@@ -12,14 +12,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest // Uruchamia pełny kontekst Springa, w tym MongoDB
-@ActiveProfiles("test") // Aktywuje profil testowy z aplikacji
+@SpringBootTest
+@ActiveProfiles("test") 
 public class UserServiceTest {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class);
 
     @Autowired
-    private UserRepository userRepository; // Będzie wstrzykiwane prawdziwe repozytorium MongoDB
+    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
