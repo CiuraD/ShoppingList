@@ -17,13 +17,13 @@
                                 <button mat-mini-fab class="mini-button" (click)="onDeleteList(productList.id)">
                                     <mat-icon>delete_forever</mat-icon>
                                 </button>
-                                @if (isSharedList(productList.userGroupId)) {
+                                @if (!isSharedList(productList.userGroupId)) {
                                     <button mat-mini-fab class="mini-button" (click)="onShareList(productList.id)">
-                                        <mat-icon>share</mat-icon>
+                                        <mat-icon>send</mat-icon>
                                     </button>
                                 } @else {
                                     <button mat-mini-fab class="mini-button" (click)="onUnshareList(productList.id)">
-                                        <mat-icon>share_off</mat-icon>
+                                        <mat-icon>cancel_schedule_send</mat-icon>
                                     </button>
                                 }
                             }

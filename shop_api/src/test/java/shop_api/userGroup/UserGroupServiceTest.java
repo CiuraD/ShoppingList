@@ -3,24 +3,18 @@ package shop_api.userGroup;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import shop_api.user.User;
 import shop_api.user.UserRepository;
-import shop_api.user.UserServiceTest;
 
 @SpringBootTest
 @ActiveProfiles("test") 
 public class UserGroupServiceTest {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -33,8 +27,6 @@ public class UserGroupServiceTest {
 
     @Autowired
     private UserGroupService userGroupService;
-
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private User mockUser;
     private User mockUser2;
