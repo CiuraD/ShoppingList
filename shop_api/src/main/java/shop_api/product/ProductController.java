@@ -3,6 +3,8 @@ package shop_api.product;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
+
+        private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+
 
     @Autowired
     private ProductService productService;
@@ -56,8 +61,9 @@ public class ProductController {
         return productService.getImage(productId);
     }
 
-    @DeleteMapping("/image/{productId}")
+    @DeleteMapping("/image/delete/{productId}")
     public void deleteImage(@PathVariable String productId) {
+        logger.info("Deleting image for product with id: " + productId);
         productService.deleteImage(productId);
     }
 

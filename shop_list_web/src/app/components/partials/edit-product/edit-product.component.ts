@@ -69,7 +69,6 @@ export class EditProductComponent implements OnInit {
                 response.id = this.productId;
             }
 
-            response.imageId = 'placeholderFromEditProductComponent';
             this.dialogRef.close(response);
         }
     }

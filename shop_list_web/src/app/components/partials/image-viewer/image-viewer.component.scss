@@ -16,6 +16,11 @@
   color: #aaa;
   font-size: 14px;
   text-align: center;
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Wrapper for the image and delete button */
