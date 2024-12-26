@@ -44,6 +44,11 @@ public class ProductListService {
         if (productList != null) {
             UserGroup userGroup = userGroupRepository.findById(groupId).orElse(null);
             if (userGroup != null) {
+
+                if (userGroup.getProductListsId().contains(productListId)) {
+                    return ResponseEntity.status(400).body("Product list already shared with group");
+                }
+                
                 userGroup.addProductList(productListId);
                 userGroupRepository.save(userGroup);
 

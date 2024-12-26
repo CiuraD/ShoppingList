@@ -148,11 +148,11 @@ public class UserGroupService {
         return null;
     }
 
-    public ResponseEntity<Void> updateUserGroup(String id, String userGroupName) {
+    public ResponseEntity<Void> updateUserGroup(String id, String newUserGroupName) {
         Optional<UserGroup> userGroup = userGroupRepository.findById(id);
         if (userGroup.isPresent()) {
             UserGroup group = userGroup.get();
-            group.setName(userGroupName);
+            group.setName(newUserGroupName);
             userGroupRepository.save(group);
             return ResponseEntity.ok().build();
         }
