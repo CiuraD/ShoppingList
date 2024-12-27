@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import shop_api.product.ProductRepository;
+import shop_api.user.User;
+import shop_api.user.UserRepository;
 import shop_api.userGroup.UserGroup;
 import shop_api.userGroup.UserGroupRepository;
 
@@ -22,6 +24,9 @@ public class ProductListService {
     @Autowired
     private UserGroupRepository userGroupRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<ProductList> getAllProductLists() {
         return roductListRepository.findAll();
     }
@@ -32,6 +37,14 @@ public class ProductListService {
 
     public ProductList saveProductList(ProductList productList) {
         return roductListRepository.save(productList);
+    }
+
+    public ProductList getLastUpdtadeProductListForUser(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user != null) {
+            return roductListRepository.findFirstByUserIdOrderByUpdatedAtDesc(user.getId());
+        }
+        return null;
     }
 
     public void deleteProductList(String id) {

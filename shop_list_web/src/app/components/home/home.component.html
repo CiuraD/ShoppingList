@@ -1,0 +1,41 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <mat-card-title>Home</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        @if (latestProductList) {
+            <mat-card appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>{{latestProductList.name}}</mat-card-title>
+                    <button mat-mini-fab class="mini-button" (click)="navigateToListEdit(latestProductList.id)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </mat-card-header>
+                <mat-card-content>
+                    @for (product of products; track $index) {
+                        <mat-card class="product" appearance="outlined">
+                            <mat-card-header>
+                                <mat-card-title>{{product.name}}</mat-card-title>
+                                <mat-card-subtitle>
+                                    <span>{{product.quantity}}</span>
+                                    - 
+                                    <span>{{product.quantityType}}</span>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <image-viewer [productId]="product.id"></image-viewer>
+                            </mat-card-content>
+                        </mat-card>
+                    }
+                </mat-card-content>
+            </mat-card>
+        } @else {
+            <p>No lists found</p>
+            <p>Would you like to create one?</p>
+            <button mat-fab extended (click)="navigateToListEdit(null)">
+                <mat-icon>edit_note</mat-icon>
+                Create new list
+            </button>
+        }
+    </mat-card-content>
+</mat-card>

@@ -56,7 +56,6 @@ export class EditProductComponent implements OnInit {
             name: ['', Validators.required],
             quantity: ['', Validators.required],
             quantityType: ['', Validators.required],
-            //TODO add img
         });
     }
 

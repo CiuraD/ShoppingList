@@ -6,6 +6,7 @@ import {RegistrationComponent} from './components/registration/registration.comp
 import {ListsComponent} from './components/lists/lists.component';
 import {EditListComponent} from './components/edit-list/edit-list.component';
 import {GroupsComponent} from './components/groups/groups.component';
+import {HomeComponent} from './components/home/home.component';
 
 export const routes: Routes = [
     
@@ -21,7 +22,7 @@ export const routes: Routes = [
     },
     {
         path: 'home',
-        component: TestComponent,
+        component: HomeComponent,
         canActivate: [AuthGuard],
         data: {icon:'home', showNav: true, showInNav: true, title: 'Home'},
     },

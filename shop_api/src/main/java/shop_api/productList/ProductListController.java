@@ -30,6 +30,11 @@ public class ProductListController {
         return productListService.getProductListById(id);
     }
 
+    @GetMapping("/latest/{username}")
+    public ProductList getLastUpdtadeProductListForUser(@PathVariable String username) {
+        return productListService.getLastUpdtadeProductListForUser(username);
+    }
+
     @PostMapping
     public ProductList createProductList(@RequestBody ProductList productList) {
         return productListService.saveProductList(productList);

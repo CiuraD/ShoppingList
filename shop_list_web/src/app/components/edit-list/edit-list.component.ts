@@ -128,7 +128,9 @@ export class EditListComponent implements OnChanges {
                         this.snackBar.open('Error updating list', '', {duration: 2000});
                     }
                 }
-            );
+            ).add(() => {
+                this.router.navigate(['/home']);
+            });
         } else {
             const list: ProductListFull = {
                 ...listFormData,
@@ -141,7 +143,9 @@ export class EditListComponent implements OnChanges {
                 (error) => {
                     this.snackBar.open('Error saving list', '', {duration: 2000});
                 }
-            );
+            ).add(() => {
+                this.router.navigate(['/home']);
+            });
         }
     }
 
