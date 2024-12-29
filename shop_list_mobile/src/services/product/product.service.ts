@@ -1,4 +1,4 @@
-import { Product } from '../../models/product.model';
+import { Product } from './interfaces/product.interface';
 import { ProductListFull } from './interfaces/productListFull.interface';
 import { ProductListLazy } from './interfaces/productListLazy.interface';
 import axiosConfig from '../../configs/axios/axiosConfig';
