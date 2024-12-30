@@ -1,11 +1,11 @@
-import { LoginRequest } from './interfaces/loginRequest.interface';
+import { LoginRequest } from '../user/interfaces/loginRequest.interface';
 import axiosConfig from '../../configs/axios/axiosConfig';
 import { storageService } from '../storage/storage.service';
 import { STORAGE_KEY_JWT_TOKEN, STORAGE_KEY_USERNAME } from '../../constants';
-import { LoginResponse } from './interfaces/loginResponse.interface';
-import {RegisterRequest} from './interfaces/registerRequest.interface';
+import { LoginResponse } from '../user/interfaces/loginResponse.interface';
+import {RegisterRequest} from '../user/interfaces/registerRequest.interface';
 
-export const userAuthService = {
+export const authService = {
     login: async (data: LoginRequest): Promise<void> => {
         try {
             const response = await axiosConfig.post<LoginResponse>('/api/users/login', {data});
