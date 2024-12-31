@@ -32,7 +32,7 @@ const ProductComponent: React.FC<Product> = (product: Product) => {
 
     return (
         <div style={styles.container}>
-            <h1>Product {product.name}</h1>
+            <h1>{product.name}</h1>
             <div style={styles.content}>
                 <div style={styles.details}>
                     <p>{product.quantityType}</p>
