@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {EMULATOR_API_URL, STORAGE_KEY_JWT_TOKEN, API_TIMEOUT} from '../../constants';
+import {storageService} from '../../services/storage/storage.service';
 
 const axiosConfig = axios.create({
     baseURL: EMULATOR_API_URL,
@@ -8,10 +9,10 @@ const axiosConfig = axios.create({
 
 axiosConfig.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem(STORAGE_KEY_JWT_TOKEN);
+        const token = storageService.getItem(STORAGE_KEY_JWT_TOKEN);
         if (token) {
             if (!config.headers) {
-                config.headers = {};
+                config.headers = new axios.AxiosHeaders();
             }
             config.headers.Authorization = `Bearer ${token}`;
         }
