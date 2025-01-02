@@ -5,17 +5,22 @@ import {storageService} from '../../services/storage/storage.service';
 const axiosConfig = axios.create({
     baseURL: EMULATOR_API_URL,
     timeout: API_TIMEOUT,
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 
 axiosConfig.interceptors.request.use(
     (config) => {
-        const token = storageService.getItem(STORAGE_KEY_JWT_TOKEN);
+        const token = storageService.getStoredValue(STORAGE_KEY_JWT_TOKEN);
         if (token) {
             if (!config.headers) {
                 config.headers = new axios.AxiosHeaders();
             }
             config.headers.Authorization = `Bearer ${token}`;
         }
+        console.log('token:', token);
+        console.log('Request config:', config);
         return config;
     }
 );

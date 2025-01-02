@@ -14,7 +14,7 @@ export const imageService = {
 
     uploadImage: async (productId: string, image: string): Promise<void> => {
         try {
-            await axiosConfig.put(`/api/products/image/${productId}`, {image});
+            await axiosConfig.put(`products/image/${productId}`, {image});
         } catch (error) {
             console.error('Upload image failed', error);
             throw error;
@@ -23,7 +23,7 @@ export const imageService = {
 
     deleteImage: async (productId: string): Promise<void> => {
         try {
-            await axiosConfig.delete(`/api/products/image/delete/${productId}`);
+            await axiosConfig.delete(`products/image/delete/${productId}`);
         } catch (error) {
             console.error('Delete image failed', error);
             throw error;
@@ -32,7 +32,7 @@ export const imageService = {
 
     getImage: async (productId: string): Promise<string> => {
         try {
-            const response = await axiosConfig.get<{image: string}>(`/api/products/image/${productId}`);
+            const response = await axiosConfig.get<{image: string}>(`products/image/${productId}`);
             return response.data.image;
         } catch (error) {
             console.error('Get image failed', error);

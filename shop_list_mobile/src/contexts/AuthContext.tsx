@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = await storageService.getItem(STORAGE_KEY_JWT_TOKEN);
+      const token = storageService.getStoredValue(STORAGE_KEY_JWT_TOKEN);
       console.log('AuthContext: Retrieved token =', token);
       if (token) {
         const decodedToken = jwtDecode<DecodedToken>(token);

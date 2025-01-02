@@ -3,6 +3,8 @@ package shop_api.security;
 import java.io.IOException;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +25,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
+
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
@@ -33,6 +37,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
+        String clientIp = request.getRemoteAddr();
+        int clientPort = request.getRemotePort();
+        logger.info("Incoming request from IP: {} and Port: {}", clientIp, clientPort);
 
         String username = null;
         String jwt = null;

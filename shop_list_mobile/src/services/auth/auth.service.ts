@@ -8,7 +8,8 @@ import {RegisterRequest} from '../user/interfaces/registerRequest.interface';
 export const authService = {
     login: async (data: LoginRequest): Promise<void> => {
         try {
-            const response = await axiosConfig.post<LoginResponse>('/api/users/login', {data});
+            const response = await axiosConfig.post<LoginResponse>('users/login', data);
+            console.log('Login response:', response);
             if (response.data.token && response.data.username) {
                 await storageService.setItem(STORAGE_KEY_JWT_TOKEN, response.data.token);
                 await storageService.setItem(STORAGE_KEY_USERNAME, response.data.username);
@@ -21,7 +22,7 @@ export const authService = {
 
     register: async (data: RegisterRequest): Promise<void> => {
         try {
-            await axiosConfig.post('/api/users/register', {data});
+            await axiosConfig.post('users/register', data);
         } catch (error) {
             console.error('Register failed', error);
             throw error;

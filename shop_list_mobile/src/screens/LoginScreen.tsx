@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
+import { RootStackParamList } from '../navigation/types';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 const LoginScreen: React.FC = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const { login } = useAuth();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const handleLogin = async () => {
         try {
             await login(username, password);
+            navigation.navigate('Home');
         } catch (loginError) {
             setError('Login failed. Please check your credentials and try again.');
         }
