@@ -24,14 +24,20 @@ const AppNavigator: React.FC = () => {
     return (
         <NavigationContainer>
             <AuthProvider>
-                <Stack.Navigator initialRouteName="Home">
+                <Stack.Navigator
+                    initialRouteName="Home"
+                    screenOptions={{
+                        gestureEnabled: false,
+                        headerLeft: () => null,
+                    }}
+                >
                     <Stack.Screen name="Home" component={HomeWithAuthGuard} />
                     <Stack.Screen
                         name="Login"
                         component={LoginScreen}
                         options={{ headerShown: false }}
                     />
-                    <Stack.Screen 
+                    <Stack.Screen
                         name="Register"
                         component={RegisterScreen}
                         options={{ headerShown: false }}
@@ -40,6 +46,6 @@ const AppNavigator: React.FC = () => {
             </AuthProvider>
         </NavigationContainer>
     );
-};
+};;
 
 export default AppNavigator;
