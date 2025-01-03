@@ -11,8 +11,8 @@ const axiosConfig = axios.create({
 });
 
 axiosConfig.interceptors.request.use(
-    (config) => {
-        const token = storageService.getStoredValue(STORAGE_KEY_JWT_TOKEN);
+    async (config) => {
+        const token = await storageService.getItem(STORAGE_KEY_JWT_TOKEN);
         if (token) {
             if (!config.headers) {
                 config.headers = new axios.AxiosHeaders();

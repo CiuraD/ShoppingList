@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import {jwtDecode} from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import { storageService } from '../services/storage/storage.service';
 import { STORAGE_KEY_JWT_TOKEN } from '../constants';
+import { useNavigateTo } from '../navigation/navigationUtility';
 import { authService } from '../services/auth/auth.service';
-import { RootStackParamList } from '../navigation/types';
 
 interface AuthContextType {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
+  register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   navigateToLogin: () => void;
 }
@@ -21,31 +21,30 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const navigateTo = useNavigateTo();
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = storageService.getStoredValue(STORAGE_KEY_JWT_TOKEN);
-      console.log('AuthContext: Retrieved token =', token);
+      const token = await storageService.getItem(STORAGE_KEY_JWT_TOKEN);
+      console.log('Token:', token);
       if (token) {
         const decodedToken = jwtDecode<DecodedToken>(token);
-        console.log('AuthContext: Decoded token =', decodedToken);
         const currentTime = Date.now() / 1000;
         if (decodedToken.exp > currentTime) {
           setIsAuthenticated(true);
         } else {
           setIsAuthenticated(false);
           await storageService.removeItem(STORAGE_KEY_JWT_TOKEN);
-          navigation.navigate('Login');
+          navigateTo('Login');
         }
       } else {
         setIsAuthenticated(false);
-        navigation.navigate('Login');
+        navigateTo('Login');
       }
     };
 
     checkAuth();
-  }, [navigation]);
+  }, [navigateTo]);
 
   const login = async (username: string, password: string) => {
     try {
@@ -56,22 +55,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const register = async (username: string, email: string, password: string) => {
+    try {
+      await authService.register({ username, email, password });
+    } catch (error) {
+      console.error('Register failed', error);
+    }
+  };
+
   const logout = async () => {
     try {
       await authService.logout();
       setIsAuthenticated(false);
-      navigation.navigate('Login');
+      navigateTo('Login');
     } catch (error) {
       console.error('Logout failed', error);
     }
   };
 
   const navigateToLogin = () => {
-    navigation.navigate('Login');
+    navigateTo('Login');
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, navigateToLogin }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, register, logout, navigateToLogin }}>
       {children}
     </AuthContext.Provider>
   );

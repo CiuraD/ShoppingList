@@ -3,25 +3,38 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigateTo } from '../navigation/navigationUtility';
 
-const LoginScreen: React.FC = () => {
+const RegisterScreen: React.FC = () => {
     const [username, setUsername] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
-    const { login } = useAuth();
+    const { register } = useAuth();
     const navigateTo = useNavigateTo();
 
-    const handleLogin = async () => {
+    const handleRegister = async () => {
+        if (!username || !email || !password || !confirmPassword) {
+            setError('All fields are required.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match.');
+            return;
+        }
+
         try {
-            await login(username, password);
-            navigateTo('Home');
-        } catch (loginError) {
-            setError('Login failed. Please check your credentials and try again.');
+            await register(username, email, password);
+            navigateTo('Login');
+        } catch (registerError) {
+            console.log('Register error:', registerError);
+            setError('Registration failed. Please check your details and try again.');
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Login</Text>
+            <Text style={styles.title}>Register</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Username"
@@ -30,13 +43,27 @@ const LoginScreen: React.FC = () => {
             />
             <TextInput
                 style={styles.input}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+            />
+            <TextInput
+                style={styles.input}
                 placeholder="Password"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <Button title="Login" onPress={handleLogin} />
-            <Button title="Go to Register" onPress={() => navigateTo('Register')} />
+            <TextInput
+                style={styles.input}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+            />
+            <Button title="Register" onPress={handleRegister} />
+            <Button title="Go to Login" onPress={() => navigateTo('Login')} />
             {error && <Text style={styles.errorMessage}>{error}</Text>}
         </View>
     );
@@ -67,4 +94,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

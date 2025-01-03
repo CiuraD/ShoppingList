@@ -1,11 +1,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from '../screens/LoginScreen';
-import HomeScreen from '../screens/HomeScreen';
 import { AuthProvider } from '../contexts/AuthContext';
 import AuthGuard from '../components/AuthGuard.component';
 import { RootStackParamList } from './types';
+import LoginScreen from '../screens/LoginScreen';
+import HomeScreen from '../screens/HomeScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -25,7 +26,16 @@ const AppNavigator: React.FC = () => {
             <AuthProvider>
                 <Stack.Navigator initialRouteName="Home">
                     <Stack.Screen name="Home" component={HomeWithAuthGuard} />
-                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen
+                        name="Login"
+                        component={LoginScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen 
+                        name="Register"
+                        component={RegisterScreen}
+                        options={{ headerShown: false }}
+                    />
                 </Stack.Navigator>
             </AuthProvider>
         </NavigationContainer>

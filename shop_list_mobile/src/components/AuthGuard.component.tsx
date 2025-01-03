@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation/types';
+import { useNavigateTo } from '../navigation/navigationUtility';
 
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     const { isAuthenticated } = useAuth();
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const navigateTo = useNavigateTo();
 
     useEffect(() => {
         console.log('AuthGuard: isAuthenticated =', isAuthenticated);
         if (!isAuthenticated) {
-            navigation.navigate('Login');
+            navigateTo('Login');
         }
-    }, [isAuthenticated, navigation]);
+    }, [isAuthenticated, navigateTo]);
 
     if (!isAuthenticated) {
         return (
