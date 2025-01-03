@@ -7,6 +7,7 @@ import { RootStackParamList } from './types';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import HeaderMenu from '../components/HeaderMenu';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -26,10 +27,11 @@ const AppNavigator: React.FC = () => {
             <AuthProvider>
                 <Stack.Navigator
                     initialRouteName="Home"
-                    screenOptions={{
+                    screenOptions={({ navigation }) => ({
                         gestureEnabled: false,
                         headerLeft: () => null,
-                    }}
+                        headerRight: () => <HeaderMenu navigation={navigation} />,
+                    })}
                 >
                     <Stack.Screen name="Home" component={HomeWithAuthGuard} />
                     <Stack.Screen
@@ -46,6 +48,6 @@ const AppNavigator: React.FC = () => {
             </AuthProvider>
         </NavigationContainer>
     );
-};;
+};
 
 export default AppNavigator;
