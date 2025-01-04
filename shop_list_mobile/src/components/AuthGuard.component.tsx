@@ -1,26 +1,28 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigateTo } from '../navigation/navigationUtility';
 
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     const { isAuthenticated } = useAuth();
-    const navigation = useNavigation();
+    const navigateTo = useNavigateTo();
 
-    const navigateToLogin = () => {
-        navigation.navigate('Login');
-    };
+    useEffect(() => {
+        console.log('AuthGuard: isAuthenticated =', isAuthenticated);
+        if (!isAuthenticated) {
+            navigateTo('Login');
+        }
+    }, [isAuthenticated, navigateTo]);
 
-  if (!isAuthenticated) {
-    return (
-      <View>
-        <Text>You must be logged in to view this page.</Text>
-        <Button title="Login" onPress={navigateToLogin} />
-      </View>
-    );
-  }
+    if (!isAuthenticated) {
+        return (
+            <View>
+                <Text>You must be logged in to view this page.</Text>
+            </View>
+        );
+    }
 
-  return <>{children}</>;
+    return <>{children}</>;
 };
 
 export default AuthGuard;

@@ -59,7 +59,7 @@ public class ProductListService {
             if (userGroup != null) {
 
                 if (userGroup.getProductListsId().contains(productListId)) {
-                    return ResponseEntity.status(400).body("Product list already shared with group");
+                    return ResponseEntity.status(400).build();
                 }
                 
                 userGroup.addProductList(productListId);
@@ -67,11 +67,11 @@ public class ProductListService {
 
                 productList.setUserGroupId(groupId);
                 roductListRepository.save(productList);
-                return ResponseEntity.ok().body("Product list shared with group");
-            }
-            return ResponseEntity.status(404).body("Group not found");
+                return ResponseEntity.ok().build();
         }
-        return ResponseEntity.status(404).body("Product list not found");
+        return ResponseEntity.status(404).build();
+    }
+    return ResponseEntity.status(404).build();
     }
 
     public ResponseEntity<String> unshareListWithGroup(String productListId) {
@@ -84,10 +84,10 @@ public class ProductListService {
 
                 productList.setUserGroupId(null);
                 roductListRepository.save(productList);
-                return ResponseEntity.ok().body("Product list unshared with group");
+                return ResponseEntity.ok().build();
             }
-            return ResponseEntity.status(404).body("Group not found");
+            return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.status(404).body("Product list not found");
+        return ResponseEntity.status(404).build();
     }
 }
