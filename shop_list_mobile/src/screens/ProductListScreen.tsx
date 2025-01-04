@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Button, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Button, Alert, ActivityIndicator, StyleSheet } from 'react-native';
 import { ProductListLazy } from '../services/product/interfaces/productListLazy.interface';
 import { productService } from '../services/product/product.service';
 import { storageService } from '../services/storage/storage.service';
@@ -65,6 +65,33 @@ const ProductListScreen: React.FC = () => {
         );
     };
 
+    const handleShareList = async (listId: string) => {
+        // Implement share list logic here
+    };
+
+    const handleUnshareList = async (listId: string) => {
+        Alert.alert(
+            'Unshare List',
+            'Are you sure you want to unshare this list?',
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Unshare',
+                    style: 'destructive',
+                    onPress: async () => {
+                        try {
+                            await productService.unshareList(listId);
+                            setProductLists(productLists.filter(list => list.id !== listId));
+                        } catch (deleteError) {
+                            setError('Failed to unshare list');
+                        }
+                    },
+                },
+            ],
+            { cancelable: true }
+        );
+    };
+
     if (loading) {
         return <ActivityIndicator size="large" color="#0000ff" />;
     }
@@ -81,12 +108,29 @@ const ProductListScreen: React.FC = () => {
                 renderItem={({ item }) => (
                     <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
                         <Text>{item.name}</Text>
-                        <Button title="Delete" onPress={() => handleDeleteList(item.id)} />
+                        <Text>Number of products: {item.productsId.length}</Text>
+                        <View style={styles.buttonContainer}>
+                            <Button title="Edit" onPress={() => {/* handle edit */}} />
+                            {item.userGroupId ? (
+                                <Button title="Unshare" onPress={() => handleUnshareList(item.id)} />
+                            ) : (
+                                <Button title="Share" onPress={() => handleShareList(item.id)} />
+                            )}
+                            <Button title="Delete" onPress={() => handleDeleteList(item.id)} />
+                        </View>
                     </View>
                 )}
             />
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+});
 
 export default ProductListScreen;
