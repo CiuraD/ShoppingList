@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { View, Text, Button, Image, ActivityIndicator, Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { imageService } from '../services/img/image.service';
 
 interface ImagePreviewProps {
@@ -6,18 +8,23 @@ interface ImagePreviewProps {
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({ productId }) => {
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
-    const [_error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
     const [message, setMessage] = useState<string | null>(null);
 
-    const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setSelectedImage(file);
-            const base64 = await imageService.converetImageToBase64(file);
-            setPreviewUrl(base64);
+    const handleImageChange = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.cancelled) {
+            setSelectedImage(result.uri);
+            const base64 = await imageService.convertImageToBase64(result.uri);
+            setSelectedImage(base64);
         }
     };
 
@@ -25,51 +32,23 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ productId }) => {
         if (selectedImage) {
             setUploading(true);
             setError(null);
-            try {
-                const base64 = await imageService.converetImageToBase64(selectedImage);
-                await imageService.uploadImage(productId, base64);
-                alert('Image uploaded successfully');
-            } catch (error) {
-                setError('Failed to upload image');
-            } finally {
-                setUploading(false);
-            }
-        }
-    };
-
-    const handleDelete = async () => {
-        setUploading(true);
-        setError(null);
-        try {
-            await imageService.deleteImage(productId);
-            setSelectedImage(null);
-            setMessage('Image deleted successfully');
-            alert('Image deleted successfully');
-        } catch (error) {
-            setError('Failed to delete image');
-        } finally {
+            // Add your upload logic here
             setUploading(false);
+        } else {
+            Alert.alert('No image selected', 'Please select an image to upload.');
         }
     };
 
     return (
-        <div>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            {previewUrl && <img src={previewUrl} alt="Image Preview" style={{ width: '200px', height: '200px' }} />}
-            <button onClick={handleUpload} disabled={uploading || !selectedImage}>
-                {uploading ? 'Uploading...' : 'Upload Image'}
-            </button>
-            <button onClick={handleDelete} disabled={uploading || !selectedImage}>
-                {uploading ? 'Deleting...' : 'Delete Image'}
-            </button>
-            {message && <p style={{ color: 'green' }}>{message}</p>}
-        </div>
+        <View>
+            <Button title="Pick an image from camera roll" onPress={handleImageChange} />
+            {selectedImage && <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />}
+            {uploading && <ActivityIndicator size="large" color="#0000ff" />}
+            {error && <Text style={{ color: 'red' }}>{error}</Text>}
+            {message && <Text>{message}</Text>}
+            <Button title="Upload Image" onPress={handleUpload} />
+        </View>
     );
 };
 
 export default ImagePreview;
-
-function alert(arg0: string) {
-    throw new Error(arg0);
-}
-
