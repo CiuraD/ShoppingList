@@ -4,15 +4,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AuthProvider } from '../contexts/AuthContext';
 import AuthGuard from '../components/AuthGuard.component';
 import { RootStackParamList } from './types';
+import HeaderMenu from '../components/HeaderMenu';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-import HeaderMenu from '../components/HeaderMenu';
+import ProductListScreen from '../screens/ProductListScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const HomeWithAuthGuard: React.FC = () => {
-    console.log('Rendering HomeWithAuthGuard');
     return (
         <AuthGuard>
             <HomeScreen />
@@ -20,8 +20,18 @@ const HomeWithAuthGuard: React.FC = () => {
     );
 };
 
+const ProductListsWithAuthGuard: React.FC = () => {
+    return (
+        <AuthGuard>
+            <ProductListScreen />
+        </AuthGuard>
+    );
+};
+
 const AppNavigator: React.FC = () => {
     console.log('Rendering AppNavigator');
+    const renderHeaderRight = (navigation: any) => <HeaderMenu navigation={navigation} />;
+
     return (
         <NavigationContainer>
             <AuthProvider>
@@ -30,10 +40,11 @@ const AppNavigator: React.FC = () => {
                     screenOptions={({ navigation }) => ({
                         gestureEnabled: false,
                         headerLeft: () => null,
-                        headerRight: () => <HeaderMenu navigation={navigation} />,
+                        headerRight: () => renderHeaderRight(navigation),
                     })}
                 >
                     <Stack.Screen name="Home" component={HomeWithAuthGuard} />
+                    <Stack.Screen name="ProductLists" component={ProductListsWithAuthGuard} />
                     <Stack.Screen
                         name="Login"
                         component={LoginScreen}

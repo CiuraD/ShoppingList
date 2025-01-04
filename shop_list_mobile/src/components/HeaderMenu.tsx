@@ -28,6 +28,7 @@ const HeaderMenu: React.FC<{ navigation: any }> = ({ navigation }) => {
                     }
                 >
                     <Menu.Item onPress={() => { closeMenu(); navigation.navigate('Home'); }} title="Home" />
+                    <Menu.Item onPress={() => { closeMenu(); navigation.navigate('ProductLists'); }} title="Product Lists" />
                     <Menu.Item onPress={handleLogout} title="Logout" />
                 </Menu>
             </View>
