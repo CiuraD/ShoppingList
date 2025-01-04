@@ -39,7 +39,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final String authorizationHeader = request.getHeader("Authorization");
         String clientIp = request.getRemoteAddr();
         int clientPort = request.getRemotePort();
-        logger.info("Incoming request from IP: {} and Port: {}", clientIp, clientPort);
+        String requestUri = request.getRequestURI();
+        logger.info("Incoming request requestUri: {}",  requestUri);
 
         String username = null;
         String jwt = null;

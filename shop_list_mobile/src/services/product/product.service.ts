@@ -37,11 +37,15 @@ export const productService = {
         return response.data;
     },
     shareList: async (listId: string, userGroupId: string): Promise<any> => {
-        const response = await axiosConfig.put<any>(`productLists/shareListWithGroup/${listId}`, userGroupId);
+        const response = await axiosConfig.put<any>(`productLists/shareListWithGroup/${listId}`, userGroupId, {
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+        });
         return response.data;
     },
     unshareList: async (listId: string): Promise<any> => {
-        const response = await axiosConfig.put<any>(`productLists/unshareListWithGroup/${listId}`, {});
+        const response = await axiosConfig.put<any>(`productLists/unshareListWithGroup/${listId}`,);
         return response.data;
     },
 };

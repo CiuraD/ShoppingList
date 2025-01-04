@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Button, Alert, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Button, Alert, ActivityIndicator, StyleSheet, Modal } from 'react-native';
 import { ProductListLazy } from '../services/product/interfaces/productListLazy.interface';
 import { productService } from '../services/product/product.service';
 import { storageService } from '../services/storage/storage.service';
 import { STORAGE_KEY_USERNAME } from '../constants';
+import ShareList from '../components/ShareList.component';
 
 const ProductListScreen: React.FC = () => {
     const [userName, setUserName] = useState<string | null>(null);
     const [productLists, setProductLists] = useState<ProductListLazy[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [selectedListId, setSelectedListId] = useState<string | null>(null);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         const fetchUserName = async () => {
@@ -40,7 +44,7 @@ const ProductListScreen: React.FC = () => {
 
             fetchProductLists();
         }
-    }, [userName]);
+    }, [userName, refresh]);
 
     const handleDeleteList = async (listId: string) => {
         Alert.alert(
@@ -54,7 +58,7 @@ const ProductListScreen: React.FC = () => {
                     onPress: async () => {
                         try {
                             await productService.deleteList(listId);
-                            setProductLists(productLists.filter(list => list.id !== listId));
+                            setRefresh(!refresh);
                         } catch (deleteError) {
                             setError('Failed to delete list');
                         }
@@ -65,8 +69,9 @@ const ProductListScreen: React.FC = () => {
         );
     };
 
-    const handleShareList = async (listId: string) => {
-        // Implement share list logic here
+    const handleShareList = (listId: string) => {
+        setSelectedListId(listId);
+        setModalVisible(true);
     };
 
     const handleUnshareList = async (listId: string) => {
@@ -81,7 +86,7 @@ const ProductListScreen: React.FC = () => {
                     onPress: async () => {
                         try {
                             await productService.unshareList(listId);
-                            setProductLists(productLists.filter(list => list.id !== listId));
+                            setRefresh(!refresh);
                         } catch (deleteError) {
                             setError('Failed to unshare list');
                         }
@@ -89,6 +94,23 @@ const ProductListScreen: React.FC = () => {
                 },
             ],
             { cancelable: true }
+        );
+    };
+
+    const handleSuccess = () => {
+        Alert.alert(
+            'Success',
+            'Operation completed successfully',
+            [
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        setModalVisible(false);
+                        setRefresh(!refresh);
+                    },
+                },
+            ],
+            { cancelable: false }
         );
     };
 
@@ -121,6 +143,19 @@ const ProductListScreen: React.FC = () => {
                     </View>
                 )}
             />
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.modalView}>
+                    <ShareList listId={selectedListId!} onSuccess={handleSuccess} />
+                    <Button title="Close" onPress={() => setModalVisible(false)} />
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -130,6 +165,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 10,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
 });
 
