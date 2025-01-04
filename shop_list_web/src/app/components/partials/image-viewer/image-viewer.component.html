@@ -1,20 +1,14 @@
-<div class="image-container" (click)="imagePreview ? openLargeView() : openFileSelector()">
-    <input
-      type="file"
-      #fileInput
-      style="display: none;"
-      (change)="onFileSelected($event)"
-    />
-  
+<div class="image-container">
     @if (imagePreview) {
-      <div class="image-wrapper">
+      <div class="image-wrapper" (click)="openLargeView()">
+        <button class="delete-button" (click)="deleteImage()">X</button>
         <img [src]="imagePreview" alt="Preview" class="preview-image" />
         <!-- Delete Button -->
-        <button class="delete-button" (click)="deleteImage()">X</button>
       </div>
     } @else {
-        <div class="placeholder">
-            Click to upload an image
+        <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)"/>
+        <div class="placeholder" (click)=" openFileSelector()">
+          <span>Click to upload an image</span>
         </div>
     }
   </div>

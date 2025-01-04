@@ -39,7 +39,7 @@ export class ImageViewerComponent  implements OnInit {
   }
   
   openFileSelector(): void {
-    this.fileInputRef?.nativeElement.click();
+      this.fileInputRef?.nativeElement.click();
   }
 
   onFileSelected(event: Event): void {
@@ -69,9 +69,20 @@ export class ImageViewerComponent  implements OnInit {
   }
   
   deleteImage(): void {
-    this.imagePreview = null;
-    this.imageService.deleteImageFromBackend(this.productId);
-  }
+    if (this.productId) {
+        this.imageService.deleteImageFromBackend(this.productId).subscribe({
+            next: () => {
+                this.imagePreview = null;
+                this.cdr.markForCheck();
+            },
+            error: (err) => {
+                console.error('Error deleting image:', err);
+            }
+        });
+    } else {
+        console.error('Product ID is null, cannot delete image.');
+    }
+}
 
   openLargeView(): void {
     if (this.imagePreview) {

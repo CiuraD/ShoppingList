@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import shop_api.product.ProductRepository;
+import shop_api.user.User;
+import shop_api.user.UserRepository;
 import shop_api.userGroup.UserGroup;
 import shop_api.userGroup.UserGroupRepository;
 
@@ -22,6 +24,9 @@ public class ProductListService {
     @Autowired
     private UserGroupRepository userGroupRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<ProductList> getAllProductLists() {
         return roductListRepository.findAll();
     }
@@ -32,6 +37,14 @@ public class ProductListService {
 
     public ProductList saveProductList(ProductList productList) {
         return roductListRepository.save(productList);
+    }
+
+    public ProductList getLastUpdtadeProductListForUser(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user != null) {
+            return roductListRepository.findFirstByUserIdOrderByUpdatedAtDesc(user.getId());
+        }
+        return null;
     }
 
     public void deleteProductList(String id) {
@@ -46,7 +59,7 @@ public class ProductListService {
             if (userGroup != null) {
 
                 if (userGroup.getProductListsId().contains(productListId)) {
-                    return ResponseEntity.status(400).body("Product list already shared with group");
+                    return ResponseEntity.status(400).build();
                 }
                 
                 userGroup.addProductList(productListId);
@@ -54,11 +67,11 @@ public class ProductListService {
 
                 productList.setUserGroupId(groupId);
                 roductListRepository.save(productList);
-                return ResponseEntity.ok().body("Product list shared with group");
-            }
-            return ResponseEntity.status(404).body("Group not found");
+                return ResponseEntity.ok().build();
         }
-        return ResponseEntity.status(404).body("Product list not found");
+        return ResponseEntity.status(404).build();
+    }
+    return ResponseEntity.status(404).build();
     }
 
     public ResponseEntity<String> unshareListWithGroup(String productListId) {
@@ -71,10 +84,10 @@ public class ProductListService {
 
                 productList.setUserGroupId(null);
                 roductListRepository.save(productList);
-                return ResponseEntity.ok().body("Product list unshared with group");
+                return ResponseEntity.ok().build();
             }
-            return ResponseEntity.status(404).body("Group not found");
+            return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.status(404).body("Product list not found");
+        return ResponseEntity.status(404).build();
     }
 }

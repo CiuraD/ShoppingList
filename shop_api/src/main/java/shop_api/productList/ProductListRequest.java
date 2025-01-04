@@ -1,5 +1,6 @@
 package shop_api.productList;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.mongodb.lang.Nullable;
@@ -9,11 +10,11 @@ import shop_api.product.ProductRequest;
 public class ProductListRequest {
     @Nullable
     private String id;
-    
     private String name;
     private List<ProductRequest> products;
     private String userGroupId;
     private String userName;
+    private Date updatedAt;
 
     // Getters and Setters
     public String getId() {
@@ -54,5 +55,13 @@ public class ProductListRequest {
 
     public void setuUerName(String userName) {
         this.userName = userName;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

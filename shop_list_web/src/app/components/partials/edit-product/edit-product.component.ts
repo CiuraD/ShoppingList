@@ -56,7 +56,6 @@ export class EditProductComponent implements OnInit {
             name: ['', Validators.required],
             quantity: ['', Validators.required],
             quantityType: ['', Validators.required],
-            //TODO add img
         });
     }
 
@@ -69,7 +68,6 @@ export class EditProductComponent implements OnInit {
                 response.id = this.productId;
             }
 
-            response.imageId = 'placeholderFromEditProductComponent';
             this.dialogRef.close(response);
         }
     }

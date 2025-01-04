@@ -21,20 +21,20 @@ export class UserGroupService {
         return this.http.post<userGroup>(`${environment.api}/api/userGroups/create`, {userName, groupName});
     }
 
-    updateGroup(groupName: string, groupId: string): Observable<HttpResponse<any>> {
-        return this.http.put(`${environment.api}/api/userGroups/update/${groupId}`, {groupName}, {observe: 'response'});
+    updateGroup(groupName: string, userGroupId: string): Observable<HttpResponse<any>> {
+        return this.http.put(`${environment.api}/api/userGroups/update/${userGroupId}`, {groupName}, {observe: 'response'});
     }
 
-    deleteGroup(groupId: string): void {
-        this.http.delete(`${environment.api}/api/userGroups/delete/${groupId}`).subscribe();
+    deleteGroup(userGroupId: string): void {
+        this.http.delete(`${environment.api}/api/userGroups/delete/${userGroupId}`).subscribe();
     }
 
     joinGroup(userName: string, code: string): Observable<any> {
         return this.http.put(`${environment.api}/api/userGroups/code/join/${userName}`, code);
     }
 
-    leaveGroup(userName: string, groupId: string): Observable<any> {
-        return this.http.put(`${environment.api}/api/userGroups/leave/${userName}`, groupId);
+    leaveGroup(userName: string, userGroupId: string): Observable<any> {
+        return this.http.put(`${environment.api}/api/userGroups/leave/${userName}`, userGroupId);
     }
 
     getInvitationCodesForUser(userName: string): Observable<InvitationCode[]> {

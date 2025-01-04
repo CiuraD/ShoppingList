@@ -49,13 +49,15 @@ export class ImageService {
       return this.http.put<void>(`${environment.api}/api/products/image/${productId}`, payload);
     }
 
-    deleteImageFromBackend(productId: NumberInput): Observable<void> {
-        return this.http.delete<void>(`${environment.api}/api/products/image/${productId}`);
+    deleteImageFromBackend(productId: string): Observable<void> {
+        return this.http.delete<void>(`${environment.api}/api/products/image/delete/${productId}`);
     }
 
-    getImageFromBackend(productId: NumberInput): Observable<string> {
+    getImageFromBackend(productId: string): Observable<string> {
         return this.http.get<{ image: string }>(`${environment.api}/api/products/image/${productId}`).pipe(
-            map(response => response.image)
+            map(response => {
+              return response ? response.image : '';
+            })
         );
     }
 }

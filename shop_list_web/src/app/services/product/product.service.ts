@@ -15,13 +15,13 @@ export class ProductService {
     private http: HttpClient,
   ) {}
 
-  getProducts(): Observable<Product[]> {
-    //TODO DELETE THIS
-    return this.http.get<Product[]>(`${environment.api}/api/products`);
-  }
 
   getProductListsForUser(userName: string): Observable<ProductListLazy[]> {
     return this.http.get<ProductListLazy[]>(`${environment.api}/api/users/productLists/${userName}`);
+  }
+
+  getLatestProductListForUser(userName: string): Observable<ProductListFull> {
+    return this.http.get<ProductListFull>(`${environment.api}/api/productLists/latest/${userName}`);
   }
 
   getProductsForList(listId: string): Observable<Product[]> {

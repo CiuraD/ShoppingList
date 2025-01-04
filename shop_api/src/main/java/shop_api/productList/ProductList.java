@@ -1,8 +1,10 @@
 package shop_api.productList;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "product_lists")
@@ -13,7 +15,9 @@ public class ProductList {
     private List<String> productsId;
     private String userGroupId;
     private String userId;
-
+    @LastModifiedDate
+    private Date updatedAt;
+    
     // Constructors
     public ProductList() {}
 
