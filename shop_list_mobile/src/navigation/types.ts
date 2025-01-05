@@ -5,4 +5,5 @@ export type RootStackParamList = {
     ProductLists: undefined;
     GroupList: undefined;
     ProductListForm: { productListId: string | undefined; };
+    GroupForm: { groupId: string | undefined; };
 };

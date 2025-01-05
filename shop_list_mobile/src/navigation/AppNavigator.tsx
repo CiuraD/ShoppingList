@@ -11,6 +11,7 @@ import RegisterScreen from '../screens/RegisterScreen';
 import ProductListScreen from '../screens/ProductListScreen';
 import GroupListScreen from '../screens/GroupListScreen';
 import ProductListFormScreen from '../screens/ProductListFormScreen';
+import GroupFormScreen from '../screens/GroupFormScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -46,6 +47,14 @@ const ProductListFormWithGuard: React.FC = () => {
     );
 };
 
+const GroupFormWithGuard: React.FC = () => {
+    return (
+        <AuthGuard>
+            <GroupFormScreen route={undefined as any} navigation={undefined as any} />
+        </AuthGuard>
+    );
+};
+
 const AppNavigator: React.FC = () => {
     console.log('Rendering AppNavigator');
     const renderHeaderRight = (navigation: any) => <HeaderMenu navigation={navigation} />;
@@ -59,12 +68,20 @@ const AppNavigator: React.FC = () => {
                         gestureEnabled: false,
                         headerLeft: () => null,
                         headerRight: () => renderHeaderRight(navigation),
+                        headerRightContainerStyle: {
+                            marginRight: 10,
+                        },
+                        headerStyle: {
+                            backgroundColor: '#f8f8f8',
+                        },
                     })}
                 >
                     <Stack.Screen name="Home" component={HomeWithAuthGuard} />
                     <Stack.Screen name="ProductLists" component={ProductListsWithAuthGuard} />
                     <Stack.Screen name="GroupList" component={GroupListWithGuard} />
                     <Stack.Screen name="ProductListForm" component={ProductListFormWithGuard} />
+                    <Stack.Screen name="GroupForm" component={GroupFormWithGuard} />
+
                     <Stack.Screen
                         name="Login"
                         component={LoginScreen}

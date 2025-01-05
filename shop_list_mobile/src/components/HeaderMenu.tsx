@@ -31,6 +31,7 @@ const HeaderMenu: React.FC<{ navigation: any }> = ({ navigation }) => {
                     <Menu.Item onPress={() => { closeMenu(); navigation.navigate('ProductLists'); }} title="Product Lists" />
                     <Menu.Item onPress={() => { closeMenu(); navigation.navigate('GroupList'); }} title="Groups" />
                     <Menu.Item onPress={() => { closeMenu(); navigation.navigate('ProductListForm', { productListId: undefined }); }} title="New Product List" />
+                    <Menu.Item onPress={() => { closeMenu(); navigation.navigate('GroupForm', { groupId: undefined }); }} title="New Group" />
                     <Menu.Item onPress={handleLogout} title="Logout" />
                 </Menu>
             </View>
@@ -40,11 +41,18 @@ const HeaderMenu: React.FC<{ navigation: any }> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     headerRight: {
-        marginRight: 10,
+        marginRight: 100,
+        marginLeft: 'auto',
     },
     menuButton: {
-        color: 'blue',
+        color: 'white',
         fontSize: 16,
+        backgroundColor: 'blue',
+        height: 40,
+        textAlign: 'center',
+        lineHeight: 40, // vertically center the text
+        width: 60,
+        marginTop: 10,
     },
 });
 
