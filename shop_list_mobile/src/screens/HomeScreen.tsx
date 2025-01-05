@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Button } from 'react-native';
 import { productService } from '../services/product/product.service';
 import SingleProductList from '../components/SingleProductList.component';
 import { ProductListLazy } from '../services/product/interfaces/ProductListLazy.interface';
@@ -55,7 +55,10 @@ function HomeScreen() {
       {latestProductList ? (
         <SingleProductList productList={latestProductList} />
       ) : (
-        <Text>No product list found</Text>
+        <View>
+          <Text>No product list found</Text>
+          <Button onClick={() => {}} title="Create new List" />
+        </View>
       )}
     </View>
   );
