@@ -4,7 +4,6 @@ import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/ro
 import {filter} from 'rxjs';
 import {AuthService} from './services/auth/auth.service';
 import {JwtModule} from '@auth0/angular-jwt';
-import {TestService} from './services/test/test.service';
 import {ProductService} from './services/product/product.service';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
@@ -31,7 +30,6 @@ import {ImageService} from './services/image/image.service';
   ],
   providers: [
       AuthService,
-      TestService,
       ProductService,
       UserGroupService,
       UserService,
