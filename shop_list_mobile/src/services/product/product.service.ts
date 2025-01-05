@@ -8,8 +8,8 @@ export const productService = {
         const response = await axiosConfig.get<ProductListLazy[]>(`users/productLists/${userName}`);
         return response.data;
     },
-    getLatestProductListForUser: async (userName: string): Promise<ProductListFull> => {
-        const response = await axiosConfig.get<ProductListFull>(`productLists/latest/${userName}`);
+    getLatestProductListForUser: async (userName: string): Promise<ProductListLazy> => {
+        const response = await axiosConfig.get<ProductListLazy>(`productLists/latest/${userName}`);
         return response.data;
     },
     getProductsForList: async (listId: string): Promise<Product[]> => {

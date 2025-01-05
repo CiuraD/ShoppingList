@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
-import { ProductListFull } from '../services/product/interfaces/productListFull.interface';
+import { ProductListLazy } from '../services/product/interfaces/ProductListLazy.interface';
 import { Product } from '../services/product/interfaces/product.interface';
 import { productService } from '../services/product/product.service';
 
 interface SingleProductListProps {
-    productList: ProductListFull;
+    productList: ProductListLazy;
 }
 
 const SingleProductList: React.FC<SingleProductListProps> = ({ productList }) => {
     const [products, setProducts] = useState<Product[]>([]);
 
     useEffect(() => {
+        console.log('SingleProductList productList:', productList);
         const fetchProducts = async () => {
             try {
                 const fetchedProducts = await productService.getProductsForList(productList.id);
                 setProducts(fetchedProducts);
+                console.log('Fetched products:', fetchedProducts);
             } catch (error) {
                 console.error('Error fetching products:', error);
             }
         };
 
         fetchProducts();
-    }, [productList.id]);
+    }, [productList]);
 
-    console.log('SingleProductList component rendered', productList);
+    console.log('product list name:', productList.name);
+
     return (
         <View style={styles.container}>
             <Text style={styles.header}>{productList.name}</Text>
