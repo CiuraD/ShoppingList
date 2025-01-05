@@ -1,127 +1,129 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, Image } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { Product } from '../services/product/interfaces/product.interface';
-import { productService } from '../services/product/product.service';
-import ImagePreview from './ImagePreview.component';
-
-const styles = {
-    container: {
-        padding: '20px',
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        margin: '20px 0',
-    },
-    content: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    details: {
-        flex: 1,
-    },
-    image: {
-        width: '200px',
-        height: '200px',
-        objectFit: 'cover' as 'cover',
-        borderRadius: '8px',
-    },
-    errorMessage: {
-        color: 'red',
-    },
-    input: {
-        margin: '10px 0',
-        padding: '10px',
-        borderRadius: '4px',
-        border: '1px solid #ccc',
-        width: '100%',
-    },
-    button: {
-        padding: '10px 20px',
-        borderRadius: '4px',
-        border: 'none',
-        backgroundColor: '#007bff',
-        color: '#fff',
-        cursor: 'pointer',
-    },
-};
+// import { productService } from '../services/product/product.service';
+// import ImagePreview from './ImagePreview.component';
+import { QuantityType } from '../services/product/enums/quantity-type.enum';
 
 interface ProductEditProps {
-    productId: string;
+  product?: Product;
+  onSave: (product: Product) => void;
 }
 
-const ProductEdit: React.FC<ProductEditProps> = ({ productId }) => {
-    const [product, setProduct] = useState<Product | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [name, setName] = useState<string>('');
-    const [quantityType, setQuantityType] = useState<string>('');
-    const [quantity, setQuantity] = useState<number>(0);
+const ProductEdit: React.FC<ProductEditProps> = ({ product, onSave }) => {
+  const [name, setName] = useState<string>(product?.name || '');
+  const [quantityType, setQuantityType] = useState<QuantityType>(product?.quantityType || QuantityType.LENGTH);
+  const [quantity, setQuantity] = useState<number>(product?.quantity || 0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const fetchedProduct = await productService.getProductsForList(productId);
-                setProduct(fetchedProduct[0]); // Assuming the product list contains only one product
-                setName(fetchedProduct[0].name);
-                setQuantityType(fetchedProduct[0].quantityType);
-                setQuantity(fetchedProduct[0].quantity);
-            } catch (fetchError) {
-                setError('Failed to fetch product');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProduct();
-    }, [productId]);
-
-    const handleSave = async () => {
-        //TODO: Implement save functionality after creating EditListScreen
-    };
-
-    if (loading) {
-        return <div>Loading...</div>;
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      const newProduct: Product = {
+        ...product,
+        name,
+        quantityType,
+        quantity,
+        id: product?.id || '',
+        imageString: product?.imageString || '',
+      };
+       // Assuming saveProduct handles both create and update
+      onSave(newProduct);
+    } catch (saveError) {
+      setError('Failed to save product');
+    } finally {
+      setLoading(false);
     }
-    if (error) {
-        return <div style={styles.errorMessage}>{error}</div>;
-    }
+  };
 
-    return (
-        <div style={styles.container}>
-            <h1>Edit Product</h1>
-            <div style={styles.content}>
-                <div style={styles.details}>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Product Name"
-                        style={styles.input}
-                    />
-                    <input
-                        type="text"
-                        value={quantityType}
-                        onChange={(e) => setQuantityType(e.target.value)}
-                        placeholder="Quantity Type"
-                        style={styles.input}
-                    />
-                    <input
-                        type="number"
-                        value={quantity}
-                        onChange={(e) => setQuantity(Number(e.target.value))}
-                        placeholder="Quantity"
-                        style={styles.input}
-                    />
-                    <button onClick={handleSave} style={styles.button}>
-                        Save
-                    </button>
-                </div>
-                <div>
-                    {product && product.imageString && <img src={product.imageString} alt="Product" style={styles.image} />}
-                    {product && <ImagePreview productId={product.id} />}
-                </div>
-            </div>
-        </div>
-    );
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+  if (error) {
+    return <Text style={styles.errorMessage}>{error}</Text>;
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>{product ? 'Edit Product' : 'Create Product'}</Text>
+      <View style={styles.content}>
+        <View style={styles.details}>
+          <TextInput
+            value={name}
+            onChangeText={setName}
+            placeholder="Product Name"
+            style={styles.input}
+          />
+          <View style={styles.input}>
+            <Picker
+              selectedValue={quantityType}
+              onValueChange={(itemValue) => setQuantityType(itemValue)}
+            >
+              <Picker.Item label="Length" value={QuantityType.LENGTH} />
+              <Picker.Item label="Weight" value={QuantityType.MASS} />
+              <Picker.Item label="Volume" value={QuantityType.VOLUME} />
+            </Picker>
+          </View>
+          <TextInput
+            value={String(quantity)}
+            onChangeText={(text) => setQuantity(Number(text))}
+            placeholder="Quantity"
+            keyboardType="numeric"
+            style={styles.input}
+          />
+          <Button title="Save" onPress={handleSave} />
+        </View>
+        <View>
+          {product && product.imageString && (
+            <Image source={{ uri: product.imageString }} style={styles.image} />
+          )}
+          {/* {product && <ImagePreview productId={product.id} />} */}
+        </View>
+      </View>
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginVertical: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  content: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  details: {
+    flex: 1,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'cover',
+    borderRadius: 8,
+  },
+  errorMessage: {
+    color: 'red',
+  },
+  input: {
+    marginVertical: 10,
+    padding: 10,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    width: '100%',
+  },
+});
 
 export default ProductEdit;
