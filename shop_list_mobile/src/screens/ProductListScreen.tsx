@@ -145,17 +145,17 @@ const ProductListScreen: React.FC = () => {
                         <Text>Number of products: {item.productsId.length}</Text>
                         <View style={styles.buttonContainer}>
                             <Button title="Edit" onPress={() => {/* handle edit */}} />
-                                {item.userId === userName && (
-                                    item.userGroupId ? (
-                                        <Button title="Unshare" onPress={() => handleUnshareList(item.id)} />
-                                    ) : (
-                                        <Button title="Share" onPress={() => handleShareList(item.id)} />
-                                    )
-                                )}
-                                {item.userId === userName && (
-                                    <Button title="Delete" onPress={() => handleDeleteList(item.id)} />
-                                )}
-                                <Button title="View" onPress={() =>  setSelectedProductList(item)} />
+                            {item.userId === userName && (
+                                item.userGroupId ? (
+                                    <Button title="Unshare" onPress={() => handleUnshareList(item.id)} />
+                                ) : (
+                                    <Button title="Share" onPress={() => handleShareList(item.id)} />
+                                )
+                            )}
+                            {item.userId === userName && (
+                                <Button title="Delete" onPress={() => handleDeleteList(item.id)} />
+                            )}
+                            <Button title="View" onPress={() =>  setSelectedProductList(item)} />
                         </View>
                     </View>
                 )}

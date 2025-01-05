@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Button } from 'react-native';
 import { ProductListLazy } from '../services/product/interfaces/ProductListLazy.interface';
 import { Product } from '../services/product/interfaces/product.interface';
 import { productService } from '../services/product/product.service';
+import { storageService } from '../services/storage/storage.service';
+import { STORAGE_KEY_USERNAME } from '../constants';
 
 interface SingleProductListProps {
     productList: ProductListLazy;
@@ -10,6 +12,18 @@ interface SingleProductListProps {
 
 const SingleProductList: React.FC<SingleProductListProps> = ({ productList }) => {
     const [products, setProducts] = useState<Product[]>([]);
+      const [username, setUsername] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchUserName = async () => {
+          const storedUserName = await storageService.getItem(STORAGE_KEY_USERNAME);
+          if (storedUserName) {
+            setUsername(storedUserName);
+          }
+        };
+
+        fetchUserName();
+      }, []);
 
     useEffect(() => {
         console.log('SingleProductList productList:', productList);
@@ -30,7 +44,22 @@ const SingleProductList: React.FC<SingleProductListProps> = ({ productList }) =>
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>{productList.name}</Text>
+            <View style={styles.listHeader}>
+                <Text style={styles.header}>{productList.name}</Text>
+                <View style={styles.buttonContainer}>
+                    <Button title="Edit" onPress={() => {/* handle edit */}} />
+                    {productList.userId === username && (
+                        productList.userGroupId ? (
+                            <Button title="Unshare" onPress={() => {}} />
+                        ) : (
+                            <Button title="Share" onPress={() => {}} />
+                        )
+                    )}
+                    {productList.userId === username && (
+                        <Button title="Delete" onPress={() =>{}} />
+                    )}
+                </View>
+            </View>
             <FlatList
                 data={products}
                 keyExtractor={(item) => item.id}
@@ -68,6 +97,15 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderWidth: 1,
         borderColor: '#ccc',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    listHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
     },
 });
 
