@@ -4,6 +4,8 @@ import {userGroup} from './interfaces/userGrup.interface';
 export const userGroupService = {
     getUserGroupsForUser: async (username: string): Promise<userGroup[]> => {
         const response = await axiosConfig.get<userGroup[]>(`userGroups/getAllForUser/${username}`);
+        console.log('response gr', response);
+        console.log('response gr data', response.data);
         return response.data;
     },
 
