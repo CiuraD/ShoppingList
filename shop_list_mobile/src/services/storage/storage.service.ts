@@ -25,12 +25,4 @@ export const storageService = {
             console.error(error);
         }
     },
-
-    getStoredValue(key: string): string | null {
-        let value = null;
-        this.getItem(key).then((item) => {
-            value = item ? item : null;
-        });
-        return value;
-    },
 };
