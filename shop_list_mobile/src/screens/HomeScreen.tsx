@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { productService } from '../services/product/product.service';
 import SingleProductList from '../components/SingleProductList.component';
-import { ProductListFull } from '../services/product/interfaces/productListFull.interface';
+import { ProductListLazy } from '../services/product/interfaces/ProductListLazy.interface';
 import { storageService } from '../services/storage/storage.service';
 import { STORAGE_KEY_USERNAME } from '../constants';
 
 function HomeScreen() {
   const [userName, setUserName] = useState<string | null>(null);
-  const [latestProductList, setLatestProductList] = useState<ProductListFull | null>(null);
+  const [latestProductList, setLatestProductList] = useState<ProductListLazy | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 

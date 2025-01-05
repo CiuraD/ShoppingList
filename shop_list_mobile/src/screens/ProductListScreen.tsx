@@ -5,6 +5,7 @@ import { productService } from '../services/product/product.service';
 import { storageService } from '../services/storage/storage.service';
 import { STORAGE_KEY_USERNAME } from '../constants';
 import ShareList from '../components/ShareList.component';
+import SingleProductList from '../components/SingleProductList.component';
 
 const ProductListScreen: React.FC = () => {
     const [userName, setUserName] = useState<string | null>(null);
@@ -14,6 +15,7 @@ const ProductListScreen: React.FC = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedListId, setSelectedListId] = useState<string | null>(null);
     const [refresh, setRefresh] = useState(false);
+    const [selectedProductList, setSelectedProductList] = useState<ProductListLazy | null>(null);
 
     useEffect(() => {
         const fetchUserName = async () => {
@@ -122,6 +124,16 @@ const ProductListScreen: React.FC = () => {
         return <Text style={{ color: 'red' }}>{error}</Text>;
     }
 
+    if (selectedProductList) {
+        console.log('ProductListScreen selectedProductList:', selectedProductList);
+        return (
+        <View style={{ flex: 1 }}>
+            <Button title="Back" onPress={() => setSelectedProductList(null)} />
+            <SingleProductList productList={selectedProductList} />
+        </View>
+        );
+    }
+
     return (
         <View>
             <FlatList
@@ -133,12 +145,17 @@ const ProductListScreen: React.FC = () => {
                         <Text>Number of products: {item.productsId.length}</Text>
                         <View style={styles.buttonContainer}>
                             <Button title="Edit" onPress={() => {/* handle edit */}} />
-                            {item.userGroupId ? (
-                                <Button title="Unshare" onPress={() => handleUnshareList(item.id)} />
-                            ) : (
-                                <Button title="Share" onPress={() => handleShareList(item.id)} />
-                            )}
-                            <Button title="Delete" onPress={() => handleDeleteList(item.id)} />
+                                {item.userId === userName && (
+                                    item.userGroupId ? (
+                                        <Button title="Unshare" onPress={() => handleUnshareList(item.id)} />
+                                    ) : (
+                                        <Button title="Share" onPress={() => handleShareList(item.id)} />
+                                    )
+                                )}
+                                {item.userId === userName && (
+                                    <Button title="Delete" onPress={() => handleDeleteList(item.id)} />
+                                )}
+                                <Button title="View" onPress={() =>  setSelectedProductList(item)} />
                         </View>
                     </View>
                 )}

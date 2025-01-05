@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import shop_api.product.ProductRepository;
 import shop_api.user.User;
 import shop_api.user.UserRepository;
+import shop_api.user.UserService;
 import shop_api.userGroup.UserGroup;
 import shop_api.userGroup.UserGroupRepository;
 
@@ -27,6 +28,9 @@ public class ProductListService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     public List<ProductList> getAllProductLists() {
         return roductListRepository.findAll();
     }
@@ -40,9 +44,18 @@ public class ProductListService {
     }
 
     public ProductList getLastUpdtadeProductListForUser(String username) {
-        User user = userRepository.findByUsername(username).orElse(null);
-        if (user != null) {
-            return roductListRepository.findFirstByUserIdOrderByUpdatedAtDesc(user.getId());
+        List<ProductList> productLists = userService.getProductListsForUserAndGroups(username);
+       
+        if (productLists.size() > 0) {
+            ProductList lastUpdateProductList = productLists.get(0);
+
+            for (ProductList productList : productLists) {
+                
+                if (productList.getUpdatedAt().after(lastUpdateProductList.getUpdatedAt())) {
+                    lastUpdateProductList = productList;
+                }
+            }
+            return lastUpdateProductList;
         }
         return null;
     }

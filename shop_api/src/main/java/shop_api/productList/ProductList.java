@@ -74,4 +74,8 @@ public class ProductList {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
 }
