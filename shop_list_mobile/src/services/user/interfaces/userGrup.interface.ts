@@ -1,5 +1,5 @@
 export interface userGroup {
-    id: string;
     name: string;
+    id: string;
     creatorName: string;
 }
