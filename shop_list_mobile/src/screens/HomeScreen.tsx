@@ -31,6 +31,7 @@ function HomeScreen() {
         try {
           const productList = await productService.getLatestProductListForUser(userName);
           setLatestProductList(productList);
+          console.log('Product list:', productList);
         } catch (fetchError) {
           setError('Failed to fetch the latest product list');
         } finally {

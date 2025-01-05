@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {EMULATOR_API_URL, STORAGE_KEY_JWT_TOKEN, API_TIMEOUT} from '../../constants';
 import {storageService} from '../../services/storage/storage.service';
+import {jwtDecode} from 'jwt-decode';
+import { useNavigateTo } from '../../navigation/navigationUtility';
 
 const axiosConfig = axios.create({
     baseURL: EMULATOR_API_URL,
@@ -14,10 +16,16 @@ axiosConfig.interceptors.request.use(
     async (config) => {
         const token = await storageService.getItem(STORAGE_KEY_JWT_TOKEN);
         if (token) {
-            if (!config.headers) {
-                config.headers = new axios.AxiosHeaders();
+            const decodedToken = jwtDecode<{exp: number}>(token);
+            if (decodedToken.exp * 1000 < Date.now()) {
+                await storageService.removeItem(STORAGE_KEY_JWT_TOKEN);
+                useNavigateTo()('Login');
+            } else {
+                if (!config.headers) {
+                    config.headers = new axios.AxiosHeaders();
+                }
+                config.headers.Authorization = `Bearer ${token}`;
             }
-            config.headers.Authorization = `Bearer ${token}`;
         }
         if (!config.headers['Content-Type']) {
             config.headers['Content-Type'] = 'application/json';
