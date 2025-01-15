@@ -128,7 +128,7 @@ public class UserGroupService {
                 userRepository.save(userObj);
                 userGroupRepository.save(groupObj);
 
-                return ResponseEntity.status(HttpStatus.OK).body("User joined group");
+                return ResponseEntity.status(HttpStatus.OK).build();
             }
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Group not found");
