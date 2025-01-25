@@ -5,12 +5,15 @@ import SingleProductList from '../components/SingleProductList.component';
 import { ProductListLazy } from '../services/product/interfaces/ProductListLazy.interface';
 import { storageService } from '../services/storage/storage.service';
 import { STORAGE_KEY_USERNAME } from '../constants';
+import { useNavigateTo } from '../navigation/navigationUtility';
 
 function HomeScreen() {
   const [userName, setUserName] = useState<string | null>(null);
   const [latestProductList, setLatestProductList] = useState<ProductListLazy | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const navigateTo = useNavigateTo();
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -57,7 +60,7 @@ function HomeScreen() {
       ) : (
         <View>
           <Text>No product list found</Text>
-          <Button onClick={() => {}} title="Create new List" />
+          <Button onPress={() => navigateTo[0]('ProductListForm')} title="Create new List" />
         </View>
       )}
     </View>

@@ -9,8 +9,8 @@ export const userGroupService = {
         return response.data;
     },
 
-    createGroup: async (username: string, groupName: string): Promise<userGroup> => {
-        const response = await axiosConfig.post<userGroup>('userGroups/createGroup', {username, groupName});
+    createGroup: async (userName: string, groupName: string): Promise<userGroup> => {
+        const response = await axiosConfig.post<userGroup>('userGroups/create', {userName, groupName});
         return response.data;
     },
 

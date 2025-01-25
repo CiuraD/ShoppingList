@@ -52,9 +52,11 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-
+        logger.info("Logging in user: {}", username);
+        logger.info("Logging in user: {}", password);
         if (userService.loginUser(username, password)) {
             String token = jwtUtil.generateToken(username);
+            logger.info("Token generated: {}", token);
             return ResponseEntity.ok(Map.of("message", "Login successful", "token", token));
         } else {
             return ResponseEntity.status(401).body("Invalid credentials");

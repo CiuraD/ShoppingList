@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-
+import { userGroupService } from '../services/user/userGroup.service';
+import { storageService } from '../services/storage/storage.service';
+import { STORAGE_KEY_USERNAME } from '../constants';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 
@@ -9,24 +11,34 @@ type GroupFormScreenNavigationProp = StackNavigationProp<any>;
 
 const GroupFormScreen = ({ route, navigation }: { route: GroupFormScreenRouteProp; navigation: GroupFormScreenNavigationProp }) => {
   const [groupName, setGroupName] = useState('');
-  const [groupDescription, setGroupDescription] = useState('');
 
   useEffect(() => {
     if (route.params?.group) {
+      console.log('Editing group:', route.params.group);
       const { group } = route.params;
       setGroupName(group.name);
-      setGroupDescription(group.description);
     }
   }, [route.params]);
 
-  const handleSave = () => {
-    const group = { name: groupName, description: groupDescription };
+  const handleSave = async () => {
+    const group = { name: groupName };
+
+    const getUsername = async () => {
+      const username = await storageService.getItem(STORAGE_KEY_USERNAME);
+      return username;
+    };
+
+    const username = await getUsername();
     if (route.params?.group) {
       // Edit existing group
       // Call your update group API or function here
     } else {
-      // Create new group
-      // Call your create group API or function here
+      if (username) {
+        console.log('Creating group:', group);
+        userGroupService.createGroup(username, group.name);
+      } else {
+        console.error('Username is not available');
+      }
     }
     navigation.goBack();
   };

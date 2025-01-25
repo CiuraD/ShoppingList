@@ -12,8 +12,8 @@ const LoginScreen: React.FC = () => {
 
     const handleLogin = async () => {
         try {
+            console.log('Logging in with', username, password);
             await login(username, password);
-            navigateTo('Home');
         } catch (loginError) {
             setError('Login failed. Please check your credentials and try again.');
         }
@@ -36,7 +36,7 @@ const LoginScreen: React.FC = () => {
                 secureTextEntry
             />
             <Button title="Login" onPress={handleLogin} />
-            <Button title="Go to Register" onPress={() => navigateTo('Register')} />
+            <Button title="Go to Register" onPress={() => navigateTo[0]('Register')} />
             {error && <Text style={styles.errorMessage}>{error}</Text>}
         </View>
     );

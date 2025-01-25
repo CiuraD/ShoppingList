@@ -7,14 +7,16 @@ import {RegisterRequest} from '../user/interfaces/registerRequest.interface';
 import {jwtDecode} from 'jwt-decode';
 
 export const authService = {
-    login: async (data: LoginRequest): Promise<void> => {
+    login: async (data: LoginRequest): Promise<boolean> => {
         try {
             const response = await axiosConfig.post<LoginResponse>('users/login', data);
             if (response.data.token) {
                 const usernameFromToken = jwtDecode<{ username: string }>(response.data.token).sub;
                 await storageService.setItem(STORAGE_KEY_JWT_TOKEN, response.data.token);
                 await storageService.setItem(STORAGE_KEY_USERNAME, usernameFromToken);
+                return true;
             }
+            return false;
         } catch (error) {
             console.error('Login failed', error);
             throw error;

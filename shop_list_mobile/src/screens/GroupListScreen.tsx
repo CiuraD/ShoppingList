@@ -4,12 +4,15 @@ import { STORAGE_KEY_USERNAME } from '../constants';
 import { storageService } from '../services/storage/storage.service';
 import { userGroupService } from '../services/user/userGroup.service';
 import { userGroup } from '../services/user/interfaces/userGrup.interface';
+import { useNavigateTo } from '../navigation/navigationUtility';
 
 const GroupListScreen: React.FC = () => {
   const [username, setUsername] = useState<string | null>(null);
   const [groups, setGroups] = useState<userGroup[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const navigateTo = useNavigateTo();
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -30,21 +33,23 @@ const GroupListScreen: React.FC = () => {
     const fetchGroups = async () => {
       try {
         if (!username) {
-          throw new Error('Username not found in storage');
+          return;
         }
         console.log('fetching groups for user', username);
         const fetchedGroups = await userGroupService.getUserGroupsForUser(username);
         console.log('fetched groups', fetchedGroups);
         setGroups(fetchedGroups);
       } catch (fetchError) {
-        console.error('asssssssssss',fetchError);
+        console.error(fetchError);
         setError('Failed to fetch groups');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchGroups();
+    if (username) {
+      fetchGroups();
+    }
   }, [username]);
 
   const renderItem = ({ item }: { item: userGroup }) => (
@@ -77,7 +82,7 @@ const GroupListScreen: React.FC = () => {
   return (
     <View style={styles.container}>
         <View style={styles.buttonContainer}>
-            <Button title="Create Group" onPress={() => {}} />
+            <Button title="Create Group" onPress={() => { navigateTo[1]('GroupForm', { group: null } );}} />
             <Button title="Join Group" onPress={() => {}} />
         </View>
       <FlatList

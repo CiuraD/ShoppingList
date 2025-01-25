@@ -47,10 +47,10 @@ const ProductListFormWithGuard: React.FC = () => {
     );
 };
 
-const GroupFormWithGuard: React.FC = () => {
+const GroupFormWithGuard: React.FC<{ route: any; navigation: any }> = ({ route, navigation }) => {
     return (
         <AuthGuard>
-            <GroupFormScreen route={undefined as any} navigation={undefined as any} />
+            <GroupFormScreen route={route} navigation={navigation} />
         </AuthGuard>
     );
 };

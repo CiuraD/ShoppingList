@@ -6,6 +6,12 @@ const ProductListFormScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Product List Form</Text>
+      {/* <TextInput
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Product Name"
+                  style={styles.input}
+                /> */}
       <ProductEditComponent onSave={(product) => console.log(product)} />
     </View>
   );

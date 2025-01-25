@@ -25,7 +25,7 @@ const RegisterScreen: React.FC = () => {
 
         try {
             await register(username, email, password);
-            navigateTo('Login');
+            navigateTo[0]('Login');
         } catch (registerError) {
             console.log('Register error:', registerError);
             setError('Registration failed. Please check your details and try again.');
@@ -63,7 +63,7 @@ const RegisterScreen: React.FC = () => {
                 secureTextEntry
             />
             <Button title="Register" onPress={handleRegister} />
-            <Button title="Go to Login" onPress={() => navigateTo('Login')} />
+            <Button title="Go to Login" onPress={() => navigateTo[0]('Login')} />
             {error && <Text style={styles.errorMessage}>{error}</Text>}
         </View>
     );

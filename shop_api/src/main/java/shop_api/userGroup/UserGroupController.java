@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/api/userGroups")
 public class UserGroupController {
@@ -30,7 +29,8 @@ public class UserGroupController {
     public ResponseEntity<Void> createUserGroup(@RequestBody Map<String, String> request) {
         String groupName = request.get("groupName");
         String userName = request.get("userName");
-        logger.debug("Creating user group with name: " + groupName);
+        logger.info("Creating user group with name: " + groupName);
+        logger.info("User name: " + userName);
         return userGroupService.createUserGroup(groupName, userName);
     }
 

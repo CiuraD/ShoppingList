@@ -14,12 +14,13 @@ const axiosConfig = axios.create({
 
 axiosConfig.interceptors.request.use(
     async (config) => {
+        console.log('Request config:', config);
         const token = await storageService.getItem(STORAGE_KEY_JWT_TOKEN);
         if (token) {
             const decodedToken = jwtDecode<{exp: number}>(token);
             if (decodedToken.exp * 1000 < Date.now()) {
                 await storageService.removeItem(STORAGE_KEY_JWT_TOKEN);
-                useNavigateTo()('Login');
+                useNavigateTo()[0]('Login');
             } else {
                 if (!config.headers) {
                     config.headers = new axios.AxiosHeaders();
