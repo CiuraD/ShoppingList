@@ -26,7 +26,11 @@ export const userGroupService = {
     },
 
     joinGroup: async (userName: string, code: string): Promise<void> => {
-        await axiosConfig.put(`userGroups/join/${userName}`, code);
+        await axiosConfig.put(`userGroups/join/${userName}`, code, {
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+        });
     },
 
     leaveGroup: async (userName: string, userGroupId: string): Promise<void> => {
@@ -34,12 +38,12 @@ export const userGroupService = {
     },
 
     getInvitationCodesForUser: async (userName: string): Promise<any> => {
-        const response = await axiosConfig.get(`userGroups/getInvitationCodesForUser/${userName}`);
+        const response = await axiosConfig.get(`userGroups/code/getByUser/${userName}`);
         return response.data;
     },
 
     createInvitationCode: async (userName: string, userGroupId: string): Promise<any> => {
-        const response = await axiosConfig.post('userGroups/createInvitationCode', {userName, userGroupId});
+        const response = await axiosConfig.post('userGroups/code/create', {userName, userGroupId});
         return response.data;
     },
 };

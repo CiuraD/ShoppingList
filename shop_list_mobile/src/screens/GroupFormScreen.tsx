@@ -5,13 +5,16 @@ import { storageService } from '../services/storage/storage.service';
 import { STORAGE_KEY_USERNAME } from '../constants';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
+import { useNavigateTo } from '../navigation/navigationUtility';
 
 type GroupFormScreenRouteProp = RouteProp<{ params: { group?: { cratorName: string; name: string; id: string } } }, 'params'>;
 type GroupFormScreenNavigationProp = StackNavigationProp<any>;
 
-const GroupFormScreen = ({ route, navigation }: { route: GroupFormScreenRouteProp; navigation: GroupFormScreenNavigationProp }) => {
+const GroupFormScreen = ({ route }: { route: GroupFormScreenRouteProp; navigation: GroupFormScreenNavigationProp }) => {
   const [groupName, setGroupName] = useState('');
   const [groupId, setGroupId] = useState('');
+
+  const navigateTo = useNavigateTo();
 
   useEffect(() => {
     if (route.params?.group) {
@@ -40,7 +43,7 @@ const GroupFormScreen = ({ route, navigation }: { route: GroupFormScreenRoutePro
         console.error('Username is not available');
       }
     }
-    navigation.goBack();
+    navigateTo[0]('GroupList');
   };
 
   return (
