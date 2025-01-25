@@ -6,17 +6,19 @@ import { STORAGE_KEY_USERNAME } from '../constants';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 
-type GroupFormScreenRouteProp = RouteProp<{ params: { group?: { name: string; description: string } } }, 'params'>;
+type GroupFormScreenRouteProp = RouteProp<{ params: { group?: { cratorName: string; name: string; id: string } } }, 'params'>;
 type GroupFormScreenNavigationProp = StackNavigationProp<any>;
 
 const GroupFormScreen = ({ route, navigation }: { route: GroupFormScreenRouteProp; navigation: GroupFormScreenNavigationProp }) => {
   const [groupName, setGroupName] = useState('');
+  const [groupId, setGroupId] = useState('');
 
   useEffect(() => {
     if (route.params?.group) {
       console.log('Editing group:', route.params.group);
       const { group } = route.params;
       setGroupName(group.name);
+      setGroupId(group.id);
     }
   }, [route.params]);
 
@@ -30,11 +32,9 @@ const GroupFormScreen = ({ route, navigation }: { route: GroupFormScreenRoutePro
 
     const username = await getUsername();
     if (route.params?.group) {
-      // Edit existing group
-      // Call your update group API or function here
+      userGroupService.updateGroup(group.name, groupId);
     } else {
       if (username) {
-        console.log('Creating group:', group);
         userGroupService.createGroup(username, group.name);
       } else {
         console.error('Username is not available');

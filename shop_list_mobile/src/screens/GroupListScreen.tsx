@@ -35,13 +35,14 @@ const GroupListScreen: React.FC = () => {
         if (!username) {
           return;
         }
-        console.log('fetching groups for user', username);
+
         const fetchedGroups = await userGroupService.getUserGroupsForUser(username);
-        console.log('fetched groups', fetchedGroups);
         setGroups(fetchedGroups);
+
       } catch (fetchError) {
         console.error(fetchError);
         setError('Failed to fetch groups');
+
       } finally {
         setLoading(false);
       }
@@ -52,6 +53,32 @@ const GroupListScreen: React.FC = () => {
     }
   }, [username]);
 
+  const handleGroupDelete = async (groupId: string) => {
+    try {
+      await userGroupService.deleteGroup(groupId);
+      setGroups(groups.filter(group => group.id !== groupId));
+
+    } catch (deleteError) {
+      console.error(deleteError);
+      setError('Failed to delete group');
+    }
+  };
+
+  const handleGroupLeve = async (groupId: string) => {
+    try {
+      if (username) {
+        await userGroupService.leaveGroup(username, groupId);
+      } else {
+        setError('Username is null');
+      }
+      setGroups(groups.filter(group => group.id !== groupId));
+
+    } catch (leaveError) {
+      console.error(leaveError);
+      setError('Failed to leave group');
+    }
+  };
+
   const renderItem = ({ item }: { item: userGroup }) => (
     <View style={styles.item}>
       <Text style={styles.title}>{item.name}</Text>
@@ -59,12 +86,12 @@ const GroupListScreen: React.FC = () => {
         <Button title="Get Code" onPress={() => {}} />
         {item.creatorName === username ? (
             <View>
-                <Button title="Edit" onPress={() => {}} />
-                <Button title="Delete" onPress={() => {}} />
+                <Button title="Edit" onPress={() => { navigateTo[1]('GroupForm', { group: item } ); }} />
+                <Button title="Delete" onPress={() => { handleGroupDelete(item.id); }} />
             </View>
         ) : (
             <View>
-                <Button title="Leave" onPress={() => {}} />
+                <Button title="Leave" onPress={() => { handleGroupLeve(item.id); }} />
             </View>
         )}
       </View>
