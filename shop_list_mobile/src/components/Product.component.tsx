@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Product } from '../services/product/interfaces/product.interface';
-// import ImagePreview from './ImagePreview.component';
+import ImagePreview from './ImagePreview.component';
 
 interface ProductComponentProps {
     product: Product;
@@ -44,8 +44,7 @@ const ProductComponent: React.FC<ProductComponentProps> = ({ product }) => {
                     <Text>Quantity: {product.quantity}</Text>
                 </View>
                 <View>
-                    {product.imageString && <Image source={{ uri: product.imageString }} style={styles.image} />}
-                    {/* <ImagePreview productId={product.id} /> */}
+                    <ImagePreview imageBase64={product.imageString} productID={product.id || ''}/>
                 </View>
             </View>
         </View>

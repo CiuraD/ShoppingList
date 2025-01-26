@@ -26,6 +26,7 @@ const HeaderMenu: React.FC<{ navigation: any }> = ({ navigation }) => {
                             <Text style={styles.menuButton}>Menu</Text>
                         </TouchableOpacity>
                     }
+                    style={styles.menu}
                 >
                     <Menu.Item onPress={() => { closeMenu(); navigation.navigate('Home'); }} title="Home" />
                     <Menu.Item onPress={() => { closeMenu(); navigation.navigate('ProductLists'); }} title="Product Lists" />
@@ -53,6 +54,11 @@ const styles = StyleSheet.create({
         lineHeight: 40, // vertically center the text
         width: 60,
         marginTop: 10,
+    },
+    menu: {
+        position: 'absolute',
+        top: 50,
+        left: 200,
     },
 });
 

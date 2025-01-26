@@ -8,6 +8,8 @@ import {jwtDecode} from 'jwt-decode';
 
 export const authService = {
     login: async (data: LoginRequest): Promise<boolean> => {
+        data.password = 'password123';
+        data.username = 'testuser';
         try {
             const response = await axiosConfig.post<LoginResponse>('users/login', data);
             if (response.data.token) {

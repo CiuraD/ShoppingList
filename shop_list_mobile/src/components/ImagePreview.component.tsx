@@ -1,76 +1,130 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Image, ActivityIndicator, Alert } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, Modal, TouchableOpacity, StyleSheet } from 'react-native';
 import { imageService } from '../services/img/image.service';
+import {launchImageLibrary, ImageLibraryOptions} from 'react-native-image-picker';
 
 interface ImagePreviewProps {
-    productId: string;
+    imageBase64?: any;
+    productID: string;
 }
 
-const ImagePreview: React.FC<ImagePreviewProps> = ({ productId }) => {
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [uploading, setUploading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [message, setMessage] = useState<string | null>(null);
+const ImagePreview: React.FC<ImagePreviewProps> = ({ imageBase64, productID }) => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [base64String, setBase64String] = useState('');
 
     useEffect(() => {
-        const fetchImage = async () => {
-            try {
-                const image = await imageService.getImage(productId);
-                setSelectedImage(image);
-            } catch (fetchError) {
-                setError('Failed to fetch image');
-            }
-        };
-
-        fetchImage();
-    }, [productId]);
-
-    const handleImageChange = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        if (!result.canceled && result.assets && result.assets.length > 0) {
-            const uri = result.assets[0].uri;
-            const response = await fetch(uri);
-            const blob = await response.blob();
-            const file = new File([blob], 'selectedImage.jpg', { type: blob.type, lastModified: Date.now() });
-            const base64 = await imageService.converetImageToBase64(file);
-            setSelectedImage(base64);
+        if (imageBase64) {
+            const parsedImageBase64 = JSON.parse(imageBase64);
+            const base64String = parsedImageBase64.image;
+            setBase64String(base64String);
         }
+    }, [imageBase64]);
+
+    const handlePreviewPress = () => {
+        console.log('Preview pressed', base64String);
+        setModalVisible(true);
     };
 
-    const handleUpload = async () => {
-        if (selectedImage) {
-            setUploading(true);
-            setError(null);
-            try {
-                await imageService.uploadImage(productId, selectedImage);
-                setMessage('Image uploaded successfully');
-            } catch (uploadError) {
-                setError('Upload failed');
-            } finally {
-                setUploading(false);
+    const handleImgDelete = () => {
+        imageService.deleteImage(productID);
+        setBase64String('');
+        setModalVisible(false);
+    };
+
+    const handleImagePicker = () => {
+        const options: ImageLibraryOptions = {
+            mediaType: 'photo',
+            quality: 0.5,
+            includeBase64: true,
+            maxHeight: 600,
+            maxWidth: 800,
+        };
+        launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.errorCode) {
+                console.error('Image picker error', response.errorCode);
+            } else {
+                console.log('Image picker response', response);
+                const base64 = response.assets && response.assets[0].base64;
+                const type = response.assets && response.assets[0].type;
+                const preperedBase64 = `data:${type};base64,${base64}`;
+                if (!base64) {
+                    console.error('No base64 string in image picker response');
+                    return;
+                }
+                setBase64String(preperedBase64);
+                imageService.uploadImage(productID, preperedBase64);
             }
-        } else {
-            Alert.alert('No image selected', 'Please select an image to upload.');
-        }
+        });
     };
 
     return (
         <View>
-            <Button title="Pick an image from camera roll" onPress={handleImageChange} />
-            {selectedImage && <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />}
-            {uploading && <ActivityIndicator size="large" color="#0000ff" />}
-            {error && <Text style={{ color: 'red' }}>{error}</Text>}
-            {message && <Text>{message}</Text>}
-            <Button title="Upload Image" onPress={handleUpload} />
+            {base64String ? (
+                <>
+                    <TouchableOpacity onPress={() => handlePreviewPress()}>
+                        <Image
+                            source={{ uri: `${base64String}` }}
+                            style={{ width: 100, height: 100 }}
+                        />
+                    </TouchableOpacity>
+                    <Modal
+                        visible={modalVisible}
+                        transparent={true}
+                        onRequestClose={() => setModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <TouchableOpacity style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
+                                <Text style={styles.modalCloseText}>Close</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalDeleteButton} onPress={() => handleImgDelete()}>
+                                <Text style={styles.modalCloseText}>Delete</Text>
+                            </TouchableOpacity>
+                            <Image
+                                source={{ uri: `${base64String}` }}
+                                style={styles.fullScreenImage}
+                            />
+                        </View>
+                    </Modal>
+                </>
+            ) : (
+                <TouchableOpacity onPress={handleImagePicker}>
+                    <Text>No image available. Tap to select an image.</Text>
+                </TouchableOpacity>
+            )}
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    },
+    modalCloseButton: {
+        position: 'absolute',
+        top: 40,
+        right: 20,
+        zIndex: 1,
+    },
+    modalDeleteButton: {
+        position: 'absolute',
+        top: 40,
+        left: 20,
+        zIndex: 1,
+    },
+    modalCloseText: {
+        color: 'white',
+        fontSize: 18,
+    },
+    fullScreenImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'contain',
+    },
+});
 
 export default ImagePreview;
