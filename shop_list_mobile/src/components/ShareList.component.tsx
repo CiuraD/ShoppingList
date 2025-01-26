@@ -40,8 +40,6 @@ const ShareList: React.FC<ShareListProps> = ({ listId, onSuccess }) => {
                     const groups = await userGroupService.getUserGroupsForUser(userName);
                     setUserGroups(groups);
                     setSelectedGroupId(groups[0].id);
-                    console.log('User Groups:', groups);
-                    console.log('listID ', listId);
                 } catch (fetchError) {
                     setError('Failed to fetch user groups');
                 } finally {
@@ -56,7 +54,6 @@ const ShareList: React.FC<ShareListProps> = ({ listId, onSuccess }) => {
     const handleShare = async () => {
         if (selectedGroupId) {
             try {
-                console.log('selectedGroupId', selectedGroupId);
                 await productService.shareList(listId, selectedGroupId);
                 onSuccess();
             } catch (shareError) {

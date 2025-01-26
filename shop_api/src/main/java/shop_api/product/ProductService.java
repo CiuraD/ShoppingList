@@ -2,16 +2,11 @@ package shop_api.product;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
-
-    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
-
 
     @Autowired
     private ProductRepository productRepository;
@@ -53,7 +48,6 @@ public class ProductService {
     }
 
     public void deleteImage(String productId) {
-        logger.info("Deleting image for product with id: " + productId);
         Product product = productRepository.findById(productId).orElse(null);
         if (product != null) {
             product.setImageString("");

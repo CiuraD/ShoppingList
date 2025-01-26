@@ -43,7 +43,6 @@ const GroupListScreen: React.FC = () => {
 
   useEffect(() => {
     const fetchGroups = async () => {
-      console.log('Fetching groups');
       try {
         if (!username) {
           return;
@@ -68,7 +67,6 @@ const GroupListScreen: React.FC = () => {
 
   useEffect(() => {
     const fetchInvitationCodes = async () => {
-      console.log('Fetching invitation codes');
       try {
         if (!username) {
           return;

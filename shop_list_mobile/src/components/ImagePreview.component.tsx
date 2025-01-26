@@ -21,7 +21,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageBase64, productID }) =
     }, [imageBase64]);
 
     const handlePreviewPress = () => {
-        console.log('Preview pressed', base64String);
         setModalVisible(true);
     };
 
@@ -41,11 +40,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageBase64, productID }) =
         };
         launchImageLibrary(options, (response) => {
             if (response.didCancel) {
-                console.log('User cancelled image picker');
             } else if (response.errorCode) {
                 console.error('Image picker error', response.errorCode);
             } else {
-                console.log('Image picker response', response);
                 const base64 = response.assets && response.assets[0].base64;
                 const type = response.assets && response.assets[0].type;
                 const preperedBase64 = `data:${type};base64,${base64}`;

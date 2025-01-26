@@ -32,16 +32,13 @@ export class ShareListComponent {
 
     ngOnInit() {
         this.userGroupArray = this.data.userGroups;
-        console.log(this.userGroupArray.length);
         if (this.userGroupArray.length > 0) {
             this.selectedGroup = this.userGroupArray[0];
             this.isInGroup = true;
-            console.log(this.selectedGroup);
         }
     }
 
     onChange(event: any) {
-        console.log(event);
         this.selectedGroup = this.userGroupArray.find((group) => group.id === event.value);
     }
 

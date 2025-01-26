@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +18,6 @@ import shop_api.user.UserRepository;
 
 @Service
 public class UserGroupService {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserGroupService.class);
 
     @Autowired
     private UserGroupRepository userGroupRepository;
@@ -53,12 +49,9 @@ public class UserGroupService {
 
             userGroupRepository.save(userGroup);
             userRepository.save(userObj);
-            
-            logger.info("User group created with name: " + userGroupName);
 
             return ResponseEntity.ok().build();
         }
-        logger.info("User not found");
         return ResponseEntity.notFound().build();
     }
 
@@ -93,12 +86,10 @@ public class UserGroupService {
         String code = generateUniqueCode();
         JoinCode joinCode = new JoinCode(groupId, user.get().getId(), code);
         joinCodeRepository.save(joinCode);
-        logger.debug("Join code created with code: " + joinCode.getCode());
         return joinCode;
     }
 
     public List<JoinCode> getJoinCodesByUser(String userName) {
-        logger.info("userName - {}", userName);
         Optional<User> user = userRepository.findByUsername(userName);
         if (user.isPresent()) {
             List<JoinCode> joinCodes = joinCodeRepository.findAllByCreatorUserId(user.get().getId());
@@ -109,7 +100,6 @@ public class UserGroupService {
     }
 
     public ResponseEntity<String> joinGroup(String joinCode, String userName) {
-        logger.info("Joining group with code: " + joinCode);
         Optional<JoinCode> joinCodeOptional = joinCodeRepository.findByCode(joinCode);
 
         if (!joinCodeOptional.isPresent()) {

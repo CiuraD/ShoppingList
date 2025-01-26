@@ -3,8 +3,6 @@ package shop_api.user;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,9 +22,6 @@ import shop_api.util.JwtUtil;
 @RequestMapping("/api/users")
 public class UserController {
 
-        private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
-    
     @Autowired
     private UserService userService;
 
@@ -52,11 +47,8 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        logger.info("Logging in user: {}", username);
-        logger.info("Logging in user: {}", password);
         if (userService.loginUser(username, password)) {
             String token = jwtUtil.generateToken(username);
-            logger.info("Token generated: {}", token);
             return ResponseEntity.ok(Map.of("message", "Login successful", "token", token));
         } else {
             return ResponseEntity.status(401).body("Invalid credentials");
@@ -91,7 +83,6 @@ public class UserController {
     @PutMapping("/updateProductList")
     public ResponseEntity<?> updateProductListForUser(@RequestBody ProductListRequest productListRequest) {
         try {
-            logger.info("Updating product list for user: {}", productListRequest);
             userService.updateProductListOnUser(productListRequest);
             return ResponseEntity.ok("Product list updated");
         } catch (RuntimeException e) {

@@ -50,7 +50,6 @@ const SingleProductList: React.FC<SingleProductListProps> = ({ productList }) =>
             try {
                 const fetchedProducts = await productService.getProductsForList(productList.id);
                 setProducts(fetchedProducts);
-                console.log('Fetched products:', fetchedProducts);
             } catch (error) {
                 console.error('Error fetching products:', error);
             }

@@ -2,8 +2,6 @@ package shop_api.productList;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/productLists")
 public class ProductListController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ProductListController.class);
 
     @Autowired
     private ProductListService productListService;
@@ -57,7 +53,6 @@ public class ProductListController {
 
     @PutMapping("/shareListWithGroup/{productListId}")
     public ResponseEntity<String> shareListWithGroup(@PathVariable String productListId, @RequestBody String groupId) {
-        logger.info("Sharing list with group: {}", groupId);
         return productListService.shareListWithGroup(productListId, groupId);
     }
 

@@ -13,7 +13,6 @@ export const userGroupService = {
     },
 
     updateGroup: async (groupName: string, userGroupId: string): Promise<void> => {
-        console.log('Updating group:', groupName, userGroupId);
         await axiosConfig.put(`userGroups/update/${userGroupId}`, groupName, {
             headers: {
                 'Content-Type': 'text/plain',

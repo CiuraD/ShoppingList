@@ -170,7 +170,6 @@ export class ListsComponent implements OnInit {
     }
 
     protected onShareList(listId: string) {
-        console.log('this.userGroups', this.userGroups);
         const dialogRef = this.dialog.open(ShareListComponent, {
             panelClass: 'custom-dialog',
             data: {
@@ -181,7 +180,6 @@ export class ListsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe({
             next: data => {
-                console.log('data', data);
                 if (data !== undefined) {
                     this.shareListWithGroup(listId, data.id);
                 }

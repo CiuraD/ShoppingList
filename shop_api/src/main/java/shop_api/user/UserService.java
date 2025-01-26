@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,8 +22,6 @@ import shop_api.userGroup.UserGroupRepository;
 
 @Service
 public class UserService {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -97,7 +93,6 @@ public class UserService {
             User user = optionalUser.get();
             List<String> userProductListIds = user.getProductListsId();
             List<ProductList> userProductLists = productListRepository.findAllById(userProductListIds);
-            logger.info("User product lists: " + userProductLists);
 
             List<String> userGroupIds = user.getUserGroupId();
             if (userGroupIds == null) {
@@ -105,7 +100,6 @@ public class UserService {
             }
 
             List<UserGroup> userGroups = userGroupRepository.findAllById(userGroupIds);
-            logger.info("User groups: " + userGroups);
             
             List<String> groupProductListIds = userGroups.stream()
                 .map(UserGroup::getProductListsId)
@@ -113,7 +107,6 @@ public class UserService {
                 .collect(Collectors.toList());
 
             List<ProductList> groupProductLists = productListRepository.findAllById(groupProductListIds);
-            logger.info("Group product lists: " + groupProductLists);
 
             userProductLists.addAll(groupProductLists);
             Map<String, ProductList> uniqueProductListsMap = userProductLists.stream()
@@ -172,15 +165,11 @@ public class UserService {
     }
 
     public void updateProductListOnUser(ProductListRequest productListRequest) {
-        logger.info("Received ProductListRequest: {}", productListRequest);
-
         Optional<ProductList> optionalProductList = productListRepository.findById(productListRequest.getId());
         if (optionalProductList.isPresent()) {
             ProductList productList = optionalProductList.get();
 
             productList.setName(productListRequest.getName());
-
-            logger.info("Updating product list: {}", productList);
 
             List<ProductRequest> productRequests = productListRequest.getProducts();
             List<Product> updatedProducts = productRequests.stream()
@@ -189,7 +178,6 @@ public class UserService {
                     if (productRequest.getId() != null) {
                         product = productRepository.findById(productRequest.getId()).orElse(null);
                         if (product == null) {
-                            logger.warn("Product with ID: {} not found", productRequest.getId());
                             return null;
                         }
                         product = productRepository.findById(productRequest.getId()).orElse(null);
@@ -209,8 +197,6 @@ public class UserService {
                     return product;
                 })
                 .collect(Collectors.toList());
-            
-            logger.info("Updated products: {}", updatedProducts);
 
             updatedProducts = productRepository.saveAll(updatedProducts);
 
@@ -218,10 +204,6 @@ public class UserService {
             List<String> productIds = updatedProducts.stream().map(Product::getId).collect(Collectors.toList());
             productList.setProductsId(productIds);
             productListRepository.save(productList);
-
-            logger.info("Product list updated");
-        } else {
-            logger.warn("Product list with ID: {} not found", productListRequest.getId());
         }
     }
 

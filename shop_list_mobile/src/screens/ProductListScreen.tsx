@@ -29,7 +29,6 @@ const ProductListScreen: React.FC = () => {
                 setUserName(storedUserName);
                 const userId = await UserService.getUserId(storedUserName);
                 setUserID(userId);
-                console.log('ProductListScreen userId:', userId);
             } else {
                 setError('No user name found in storage');
                 setLoading(false);
@@ -137,7 +136,6 @@ const ProductListScreen: React.FC = () => {
     }
 
     if (selectedProductList) {
-        console.log('ProductListScreen selectedProductList:', selectedProductList);
         return (
         <View style={{ flex: 1 }}>
             <Button title="Back" onPress={() => setSelectedProductList(null)} />

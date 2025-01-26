@@ -152,7 +152,3 @@ This is a multi-platform shopping list application with web, mobile, and API com
 - [React Native Documentation](https://reactnative.dev/docs/getting-started)
 - [Angular Documentation](https://angular.io/docs)
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
-
-## License
-
-This project is licensed under the MIT License.

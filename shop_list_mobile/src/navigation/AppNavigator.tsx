@@ -56,7 +56,6 @@ const GroupFormWithGuard: React.FC<{ route: any; navigation: any }> = ({ route, 
 };
 
 const AppNavigator: React.FC = () => {
-    console.log('Rendering AppNavigator');
     const renderHeaderRight = (navigation: any) => <HeaderMenu navigation={navigation} />;
 
     return (

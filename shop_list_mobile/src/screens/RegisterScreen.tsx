@@ -27,7 +27,6 @@ const RegisterScreen: React.FC = () => {
             await register(username, email, password);
             navigateTo[0]('Login');
         } catch (registerError) {
-            console.log('Register error:', registerError);
             setError('Registration failed. Please check your details and try again.');
         }
     };

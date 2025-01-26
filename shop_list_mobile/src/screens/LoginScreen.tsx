@@ -12,7 +12,6 @@ const LoginScreen: React.FC = () => {
 
     const handleLogin = async () => {
         try {
-            console.log('Logging in with', username, password);
             await login(username, password);
         } catch (loginError) {
             setError('Login failed. Please check your credentials and try again.');

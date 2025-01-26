@@ -3,8 +3,6 @@ package shop_api.userGroup;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/userGroups")
 public class UserGroupController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserGroupController.class);
-
     @Autowired
     private UserGroupService userGroupService;
 
@@ -29,8 +25,6 @@ public class UserGroupController {
     public ResponseEntity<Void> createUserGroup(@RequestBody Map<String, String> request) {
         String groupName = request.get("groupName");
         String userName = request.get("userName");
-        logger.info("Creating user group with name: " + groupName);
-        logger.info("User name: " + userName);
         return userGroupService.createUserGroup(groupName, userName);
     }
 
@@ -58,8 +52,6 @@ public class UserGroupController {
     public JoinCode createJoinCode(@RequestBody Map<String, String> request) {
         String groupId = request.get("userGroupId");
         String creatorUserName = request.get("userName");
-
-        logger.debug("Creating join code for group with id: " + groupId);
         
         return userGroupService.createJoinCode(creatorUserName, groupId);
     }
@@ -69,14 +61,11 @@ public class UserGroupController {
     public List<JoinCode> getJoinCodesByUser(@PathVariable String userName) {
         
         List<JoinCode> joinCodes = userGroupService.getJoinCodesByUser(userName);
-        joinCodes.forEach(code -> logger.info("JoinCode: " + code.getUserGroupId() + " - " + code.getCreatorUserId() + " - " + code.getCode()));
-        logger.info("Returning join codes: " + joinCodes);
         return joinCodes;
     }
 
     @PutMapping("/code/join/{userName}")
     public ResponseEntity<String> joinGroup(@RequestBody String code, @PathVariable String userName) {
-        logger.debug("Joining group with code: " + code);
         return userGroupService.joinGroup(code, userName);
     }
 }

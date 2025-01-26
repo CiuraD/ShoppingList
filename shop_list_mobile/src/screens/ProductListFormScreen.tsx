@@ -56,7 +56,6 @@ const ProductListFormScreen = ({ route }: { route: ProductListFormScreenRoutePro
   };
 
   const handleSaveProduct = (product: Product) => {
-    console.log(product);
     if (selectedProduct) {
       const index = products.findIndex((p) => p.id === product.id);
       const newProducts = [...products];
@@ -69,8 +68,6 @@ const ProductListFormScreen = ({ route }: { route: ProductListFormScreenRoutePro
   };
 
   const handleOnSaveList = () => {
-    console.log(listName);
-    console.log(productListID);
     if (productListID) {
       updateProductList();
     } else {

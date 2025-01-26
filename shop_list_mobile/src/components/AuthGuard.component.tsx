@@ -8,7 +8,6 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     const navigateTo = useNavigateTo();
 
     useEffect(() => {
-        console.log('AuthGuard: isAuthenticated =', isAuthenticated);
         if (!isAuthenticated) {
             navigateTo[0]('Login');
         }
