@@ -1,7 +1,7 @@
 import {Product} from "./product.interface";
 
 export interface ProductListFull {
-    id: string;
+    id?: string;
     name: string;
     products: Array<Product>;
     userGroupId?: string;

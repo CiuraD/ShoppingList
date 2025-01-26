@@ -18,6 +18,8 @@ const ProductEdit: React.FC<ProductEditProps> = ({ product, onSave }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const QuantityTypes = [...Object.values(QuantityType)];
+
   const handleSave = async () => {
     setLoading(true);
     try {
@@ -29,7 +31,6 @@ const ProductEdit: React.FC<ProductEditProps> = ({ product, onSave }) => {
         id: product?.id || '',
         imageString: product?.imageString || '',
       };
-       // Assuming saveProduct handles both create and update
       onSave(newProduct);
     } catch (saveError) {
       setError('Failed to save product');
@@ -61,9 +62,9 @@ const ProductEdit: React.FC<ProductEditProps> = ({ product, onSave }) => {
               selectedValue={quantityType}
               onValueChange={(itemValue) => setQuantityType(itemValue)}
             >
-              <Picker.Item label="Length" value={QuantityType.LENGTH} />
-              <Picker.Item label="Weight" value={QuantityType.MASS} />
-              <Picker.Item label="Volume" value={QuantityType.VOLUME} />
+              {QuantityTypes.map((type) => (
+                <Picker.Item key={type} label={type} value={type} />
+              ))}
             </Picker>
           </View>
           <TextInput
@@ -88,11 +89,13 @@ const ProductEdit: React.FC<ProductEditProps> = ({ product, onSave }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
-    marginVertical: 20,
+    marginVertical: 5,
+    backgroundColor: '#fff',
+    width: 300,
   },
   title: {
     fontSize: 24,

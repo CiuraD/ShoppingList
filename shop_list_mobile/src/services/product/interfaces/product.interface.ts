@@ -1,7 +1,7 @@
 import {QuantityType} from '../enums/quantity-type.enum';
 
 export interface Product {
-    id: string;
+    id?: string;
     name: string;
     quantity: number;
     quantityType: QuantityType;

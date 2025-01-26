@@ -14,7 +14,6 @@ const axiosConfig = axios.create({
 
 axiosConfig.interceptors.request.use(
     async (config) => {
-        console.log('Request config:', config);
         const token = await storageService.getItem(STORAGE_KEY_JWT_TOKEN);
         if (token) {
             const decodedToken = jwtDecode<{exp: number}>(token);
@@ -31,8 +30,6 @@ axiosConfig.interceptors.request.use(
         if (!config.headers['Content-Type']) {
             config.headers['Content-Type'] = 'application/json';
         }
-        console.log('token:', token);
-        console.log('Request config:', config);
         return config;
     }
 );

@@ -18,7 +18,6 @@ const GroupFormScreen = ({ route }: { route: GroupFormScreenRouteProp; navigatio
 
   useEffect(() => {
     if (route.params?.group) {
-      console.log('Editing group:', route.params.group);
       const { group } = route.params;
       setGroupName(group.name);
       setGroupId(group.id);

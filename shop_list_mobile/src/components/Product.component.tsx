@@ -1,16 +1,22 @@
 import React from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { Product } from '../services/product/interfaces/product.interface';
-import ImagePreview from './ImagePreview.component';
+// import ImagePreview from './ImagePreview.component';
 
-const styles = {
+interface ProductComponentProps {
+    product: Product;
+  }
+
+  const styles = StyleSheet.create({
     container: {
-        padding: '20px',
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        margin: '20px 0',
+        padding: 20,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        marginVertical: 20,
     },
     content: {
-        display: 'flex',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -18,32 +24,31 @@ const styles = {
         flex: 1,
     },
     image: {
-        width: '200px',
-        height: '200px',
-        objectFit: 'cover' as 'cover',
-        borderRadius: '8px',
+        width: 200,
+        height: 200,
+        resizeMode: 'cover',
+        borderRadius: 8,
     },
     errorMessage: {
         color: 'red',
     },
-};
+});
 
-const ProductComponent: React.FC<Product> = (product: Product) => {
-
+const ProductComponent: React.FC<ProductComponentProps> = ({ product }) => {
     return (
-        <div style={styles.container}>
-            <h1>{product.name}</h1>
-            <div style={styles.content}>
-                <div style={styles.details}>
-                    <p>{product.quantityType}</p>
-                    <p>Quantity: {product.quantity}</p>
-                </div>
-                <div>
-                    {product.imageString && <img src={product.imageString} alt="Product" style={styles.image} />}
-                    <ImagePreview productId={product.id} />
-                </div>
-            </div>
-        </div>
+        <View style={styles.container}>
+            <Text>{product.name}</Text>
+            <View style={styles.content}>
+                <View style={styles.details}>
+                    <Text>{product.quantityType}</Text>
+                    <Text>Quantity: {product.quantity}</Text>
+                </View>
+                <View>
+                    {product.imageString && <Image source={{ uri: product.imageString }} style={styles.image} />}
+                    {/* <ImagePreview productId={product.id} /> */}
+                </View>
+            </View>
+        </View>
     );
 };
 

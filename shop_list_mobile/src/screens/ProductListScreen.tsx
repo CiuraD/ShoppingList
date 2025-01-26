@@ -6,9 +6,12 @@ import { storageService } from '../services/storage/storage.service';
 import { STORAGE_KEY_USERNAME } from '../constants';
 import ShareList from '../components/ShareList.component';
 import SingleProductList from '../components/SingleProductList.component';
+import UserService from '../services/user/user.service';
+import { useNavigateTo } from '../navigation/navigationUtility';
 
 const ProductListScreen: React.FC = () => {
     const [userName, setUserName] = useState<string | null>(null);
+    const [userID, setUserID] = useState<string | null>(null);
     const [productLists, setProductLists] = useState<ProductListLazy[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -17,11 +20,16 @@ const ProductListScreen: React.FC = () => {
     const [refresh, setRefresh] = useState(false);
     const [selectedProductList, setSelectedProductList] = useState<ProductListLazy | null>(null);
 
+    const navigateTo = useNavigateTo();
+
     useEffect(() => {
         const fetchUserName = async () => {
             const storedUserName = await storageService.getItem(STORAGE_KEY_USERNAME);
             if (storedUserName) {
                 setUserName(storedUserName);
+                const userId = await UserService.getUserId(storedUserName);
+                setUserID(userId);
+                console.log('ProductListScreen userId:', userId);
             } else {
                 setError('No user name found in storage');
                 setLoading(false);
@@ -102,7 +110,7 @@ const ProductListScreen: React.FC = () => {
     const handleSuccess = () => {
         Alert.alert(
             'Success',
-            'Operation completed successfully',
+            'Operation complited successfully',
             [
                 {
                     text: 'OK',
@@ -114,6 +122,10 @@ const ProductListScreen: React.FC = () => {
             ],
             { cancelable: false }
         );
+    };
+
+    const handleEdit = (listName: string, listId: string) => {
+        navigateTo[1]('ProductListForm', { productListID: listId, productListName: listName });
     };
 
     if (loading) {
@@ -136,6 +148,7 @@ const ProductListScreen: React.FC = () => {
 
     return (
         <View>
+            <Button title="Create new List" onPress={() => navigateTo[0]('ProductListForm')} />
             <FlatList
                 data={productLists}
                 keyExtractor={(item) => item.id}
@@ -144,15 +157,15 @@ const ProductListScreen: React.FC = () => {
                         <Text>{item.name}</Text>
                         <Text>Number of products: {item.productsId.length}</Text>
                         <View style={styles.buttonContainer}>
-                            <Button title="Edit" onPress={() => {/* handle edit */}} />
-                            {item.userId === userName && (
+                            <Button title="Edit" onPress={() => { handleEdit(item.name, item.id)}} />
+                            {item.userId === userID && (
                                 item.userGroupId ? (
                                     <Button title="Unshare" onPress={() => handleUnshareList(item.id)} />
                                 ) : (
                                     <Button title="Share" onPress={() => handleShareList(item.id)} />
                                 )
                             )}
-                            {item.userId === userName && (
+                            {item.userId === userID && (
                                 <Button title="Delete" onPress={() => handleDeleteList(item.id)} />
                             )}
                             <Button title="View" onPress={() =>  setSelectedProductList(item)} />
