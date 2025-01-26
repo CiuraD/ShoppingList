@@ -35,11 +35,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           setIsAuthenticated(false);
           await storageService.removeItem(STORAGE_KEY_JWT_TOKEN);
-          navigateTo('Login');
+          navigateTo[0]('Login');
         }
       } else {
         setIsAuthenticated(false);
-        navigateTo('Login');
+        navigateTo[0]('Login');
       }
     };
 
@@ -48,8 +48,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (username: string, password: string) => {
     try {
-      await authService.login({ username, password });
-      setIsAuthenticated(true);
+      if (await authService.login({ username, password })) {
+        setIsAuthenticated(true);
+        navigateTo[0]('Home');
+      }
     } catch (error) {
       console.error('Login failed', error);
     }
@@ -67,14 +69,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await authService.logout();
       setIsAuthenticated(false);
-      navigateTo('Login');
+      navigateTo[0]('Login');
     } catch (error) {
       console.error('Logout failed', error);
     }
   };
 
   const navigateToLogin = () => {
-    navigateTo('Login');
+    navigateTo[0]('Login');
   };
 
   return (

@@ -81,10 +81,10 @@ public class ProductListService {
                 productList.setUserGroupId(groupId);
                 roductListRepository.save(productList);
                 return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.status(404).build();
         }
         return ResponseEntity.status(404).build();
-    }
-    return ResponseEntity.status(404).build();
     }
 
     public ResponseEntity<String> unshareListWithGroup(String productListId) {

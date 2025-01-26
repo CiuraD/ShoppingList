@@ -21,8 +21,7 @@ import shop_api.user.UserRepository;
 @Service
 public class UserGroupService {
 
-        private static final Logger logger = LoggerFactory.getLogger(UserGroupService.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(UserGroupService.class);
 
     @Autowired
     private UserGroupRepository userGroupRepository;
@@ -55,8 +54,11 @@ public class UserGroupService {
             userGroupRepository.save(userGroup);
             userRepository.save(userObj);
             
+            logger.info("User group created with name: " + userGroupName);
+
             return ResponseEntity.ok().build();
         }
+        logger.info("User not found");
         return ResponseEntity.notFound().build();
     }
 
@@ -128,7 +130,7 @@ public class UserGroupService {
                 userRepository.save(userObj);
                 userGroupRepository.save(groupObj);
 
-                return ResponseEntity.status(HttpStatus.OK).body("User joined group");
+                return ResponseEntity.status(HttpStatus.OK).build();
             }
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Group not found");

@@ -19,7 +19,7 @@ axiosConfig.interceptors.request.use(
             const decodedToken = jwtDecode<{exp: number}>(token);
             if (decodedToken.exp * 1000 < Date.now()) {
                 await storageService.removeItem(STORAGE_KEY_JWT_TOKEN);
-                useNavigateTo()('Login');
+                useNavigateTo()[0]('Login');
             } else {
                 if (!config.headers) {
                     config.headers = new axios.AxiosHeaders();
@@ -30,8 +30,6 @@ axiosConfig.interceptors.request.use(
         if (!config.headers['Content-Type']) {
             config.headers['Content-Type'] = 'application/json';
         }
-        console.log('token:', token);
-        console.log('Request config:', config);
         return config;
     }
 );

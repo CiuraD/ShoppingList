@@ -34,13 +34,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private CustomUserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
-        String clientIp = request.getRemoteAddr();
-        int clientPort = request.getRemotePort();
-        String requestUri = request.getRequestURI();
-        logger.info("Incoming request requestUri: {}",  requestUri);
+
+        logger.info("Authorization Header: " + request.getRequestURL().toString());
 
         String username = null;
         String jwt = null;
@@ -50,7 +47,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = extractUsername(jwt);
             } catch (SignatureException e) {
-                // Invalid JWT signature
                 logger.error("Invalid JWT signature: " + e.getMessage(), e);
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
@@ -71,6 +67,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
+        logger.info("WORKING");
         chain.doFilter(request, response);
     }
 

@@ -26,10 +26,13 @@ const HeaderMenu: React.FC<{ navigation: any }> = ({ navigation }) => {
                             <Text style={styles.menuButton}>Menu</Text>
                         </TouchableOpacity>
                     }
+                    style={styles.menu}
                 >
                     <Menu.Item onPress={() => { closeMenu(); navigation.navigate('Home'); }} title="Home" />
                     <Menu.Item onPress={() => { closeMenu(); navigation.navigate('ProductLists'); }} title="Product Lists" />
                     <Menu.Item onPress={() => { closeMenu(); navigation.navigate('GroupList'); }} title="Groups" />
+                    <Menu.Item onPress={() => { closeMenu(); navigation.navigate('ProductListForm', { productListId: undefined }); }} title="New Product List" />
+                    <Menu.Item onPress={() => { closeMenu(); navigation.navigate('GroupForm', { groupId: undefined }); }} title="New Group" />
                     <Menu.Item onPress={handleLogout} title="Logout" />
                 </Menu>
             </View>
@@ -39,11 +42,23 @@ const HeaderMenu: React.FC<{ navigation: any }> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     headerRight: {
-        marginRight: 10,
+        marginRight: 100,
+        marginLeft: 'auto',
     },
     menuButton: {
-        color: 'blue',
+        color: 'white',
         fontSize: 16,
+        backgroundColor: 'blue',
+        height: 40,
+        textAlign: 'center',
+        lineHeight: 40, // vertically center the text
+        width: 60,
+        marginTop: 10,
+    },
+    menu: {
+        position: 'absolute',
+        top: 50,
+        left: 200,
     },
 });
 
